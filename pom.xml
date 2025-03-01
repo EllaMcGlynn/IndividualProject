@@ -70,10 +70,99 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.3</version>
+		</dependency>
+
+		<!--JWT Token dependencies -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Cucumber dependencies -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>6.11.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>6.11.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>6.11.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.3.0</version>  <!-- Use latest version -->
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.2.1</version>  <!-- Use the latest version -->
+		</dependency>
+
 	</dependencies>
+
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-Dfile.encoding=UTF-8</argLine>
+					<includes>
+						<include>**/*.java</include>  <!-- Include all test
+						classes -->
+					</includes>
+					<excludes>
+						<exclude>**/*Karate*.java</exclude>  <!-- Exclude Karate
+						tests from this phase -->
+					</excludes>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -102,6 +191,34 @@
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>5.0.0.4389</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<argLine>${jacoco.agent.arg}</argLine>
+								<include>**/*Karate*.java</include> <!-- Run only
+								Karate tests here -->
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
