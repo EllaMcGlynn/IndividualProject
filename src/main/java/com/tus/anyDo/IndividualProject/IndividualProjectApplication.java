@@ -1,4 +1,4 @@
-package com.tus.anyDo.Individual_Project;
+package com.tus.anyDo.IndividualProject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

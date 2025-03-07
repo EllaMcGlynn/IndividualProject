@@ -1,4 +1,4 @@
-package com.tus.anyDo.IndividualProject.models;
+package com.tus.anyDo.IndividualProject.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,9 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
 @Data  // This will generate getters, setters, toString, equals, and hashCode methods
 public class User implements UserDetails {
     @Id
@@ -28,14 +30,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-
-    public User() {}
-
-    public User(String username, String password, Role role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
+    
     
     @Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

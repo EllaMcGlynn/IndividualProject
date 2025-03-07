@@ -1,4 +1,4 @@
-package com.tus.anyDo.IndividualProject.dtos;
+package com.tus.anyDo.IndividualProject.dto;
 
 import lombok.Data;
 

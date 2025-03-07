@@ -1,10 +1,10 @@
 package com.tus.anyDo.IndividualProject.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -18,8 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableMethodSecurity
 public class SecurityConfig {
 	
-	@Autowired
 	private JWTAuthenticationFilter jwtFilter;
+	
+	public SecurityConfig(JWTAuthenticationFilter jwtFilter) {
+		this.jwtFilter = jwtFilter;
+	}
 
     // Define a PasswordEncoder bean for your application.
     @Bean
@@ -30,24 +33,18 @@ public class SecurityConfig {
     // Configure the security filter chain.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    	return http
-    	        .csrf(csrf -> csrf.disable())
-    	        .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-    	        // Authorise requests configuration
-    	        .authorizeHttpRequests(authorize -> authorize
-    	            // Allow all requests to the H2 console
-    	            .requestMatchers("/h2-console/**").permitAll()
-    	            .requestMatchers("api/users/login").permitAll()
-    	            // Allow public access to specified endpoints and static resources
-    	            .requestMatchers(
-    	                "/",
-    	                "/index.html", 
-    	                "/script.js", 
-    	                "/styles.css", 
-    	                "/content/**", 
-    	                "/assets/**"  // This covers /assets and all its subfolders/files
-    	            ).permitAll()
-    	            .anyRequest().authenticated()
-    	        ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).build();
-    	    }
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> 
+            	auth.anyRequest().permitAll() // Allow all requests
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
+            .formLogin(form -> form.disable()) // Disable form login
+            .httpBasic(httpBasic -> httpBasic.disable()) // Disable HTTP Basic auth
+            .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        
+        return http.build();
+    }
+
 }

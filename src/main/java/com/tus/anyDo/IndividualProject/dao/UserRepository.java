@@ -1,8 +1,8 @@
-package com.tus.anyDo.IndividualProject.repos;
+package com.tus.anyDo.IndividualProject.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.tus.anyDo.IndividualProject.models.User;
+import com.tus.anyDo.IndividualProject.model.User;
 
 import java.util.Optional;
 
