@@ -58,4 +58,21 @@ public class TaskService implements ITaskService {
         // Fetch tasks that are associated with the given projectId
         return taskRepository.findByProjectId(projectId);
     }
+    
+    @Override
+    public void deleteTask(Long taskId) {
+        Task task = taskRepository.findById(taskId).orElse(null);
+        
+        if (task != null) {
+            taskRepository.delete(task);  
+        } else {
+            throw new IllegalArgumentException("Task not found with ID: " + taskId);  
+        }
+    }
+
+    @Override
+    public Task getTaskById(Long taskId) {
+        return taskRepository.findById(taskId).orElse(null); 
+    }
 }
+

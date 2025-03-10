@@ -29,10 +29,6 @@ $(document).ready(function() {
 		$("#loaded-content").load("components/dashboard.html");
 	}); 
 	
-	$("#kanban-link").on("click", function(e) { 
-		e.preventDefault();
-		$("#loaded-content").load("content/kanban.html"); 
-	});
 	
 	$("#pomodoro-link").on("click", function(e) { 
 		e.preventDefault();

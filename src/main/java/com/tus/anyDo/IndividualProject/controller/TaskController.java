@@ -1,9 +1,10 @@
 package com.tus.anyDo.IndividualProject.controller;
 
 import com.tus.anyDo.IndividualProject.dto.TaskCreateRequest;
+import com.tus.anyDo.IndividualProject.dto.TaskResponseDto;
+import com.tus.anyDo.IndividualProject.mapper.TaskMapper;
 import com.tus.anyDo.IndividualProject.model.Task;
 import com.tus.anyDo.IndividualProject.model.User;
-import com.tus.anyDo.IndividualProject.model.TaskStatus;
 import com.tus.anyDo.IndividualProject.service.ITaskService;
 import com.tus.anyDo.IndividualProject.service.IUserService;
 import com.tus.anyDo.IndividualProject.service.IJwtService;
@@ -30,7 +31,7 @@ public class TaskController {
 
     // Endpoint for creating a task
     @PostMapping("/add")
-    public ResponseEntity<Task> createTask(@RequestHeader("Authorization") String token,
+    public ResponseEntity<TaskResponseDto> createTask(@RequestHeader("Authorization") String token,
                                            @RequestBody TaskCreateRequest taskCreateRequest) {
         // Extract the username from the JWT token
         String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
@@ -41,9 +42,12 @@ public class TaskController {
         // Create the task and associate it with the user, project (if any), and status
         Task task = taskService.createTask(username, taskCreateRequest.getName(),
                                            taskCreateRequest.getProjectId(), taskCreateRequest.getStatus());
-
+        
+        TaskResponseDto taskResponseDto = new TaskResponseDto();
+        TaskMapper.toTaskResponseDto(task, taskResponseDto);
+        
         // Return the created task as a response entity with a CREATED status
-        return ResponseEntity.status(HttpStatus.CREATED).body(task);
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskResponseDto);
     }
 
     // Endpoint to get all tasks for the logged-in user
@@ -61,38 +65,32 @@ public class TaskController {
         // Return the list of tasks with an OK status
         return ResponseEntity.status(HttpStatus.OK).body(tasks);
     }
+    
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<Void> deleteTask(@RequestHeader("Authorization") String token,
+            @PathVariable("taskId") Long taskId) {
+    	// Extract the username from the JWT token
+        String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
 
-    // Endpoint to get tasks filtered by their status
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<Task>> getTasksByStatus(@RequestHeader("Authorization") String token,
-                                                        @PathVariable TaskStatus status) {
-        // Extract the username from the JWT token
-        String username = jwtService.extractUsername(token.substring(7));
+        // Retrieve the task to check ownership and existence
+        Task task = taskService.getTaskById(taskId);
 
-        // Retrieve the user by their username
-        User user = userService.getUserByUsername(username);
+        // Check if the task exists and if it belongs to the user
+        if (task == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // Task not found
+        }
 
-        // Fetch tasks for the user with the specified status
-        List<Task> tasks = taskService.getTasksByStatus(status);
+        // Verify if the task belongs to the user
+        if (!task.getUser().getUsername().equals(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();  // User does not have permission
+        }
 
-        // Return the list of tasks with an OK status
-        return ResponseEntity.status(HttpStatus.OK).body(tasks);
+        // Proceed to delete the task
+        taskService.deleteTask(taskId);
+
+        // Return a successful response with NO_CONTENT status
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    	
     }
-
-    // Endpoint to get tasks filtered by project ID
-    @GetMapping("/project/{projectId}")
-    public ResponseEntity<List<Task>> getTasksByProject(@RequestHeader("Authorization") String token,
-                                                         @PathVariable Long projectId) {
-        // Extract the username from the JWT token
-        String username = jwtService.extractUsername(token.substring(7));
-
-        // Retrieve the user by their username
-        User user = userService.getUserByUsername(username);
-
-        // Fetch tasks related to the specified project for the user
-        List<Task> tasks = taskService.getTasksByProject(projectId);
-
-        // Return the list of tasks with an OK status
-        return ResponseEntity.status(HttpStatus.OK).body(tasks);
-    }
+    
 }

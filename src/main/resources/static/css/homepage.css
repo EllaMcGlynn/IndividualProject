@@ -223,7 +223,6 @@ body {
 
 #loaded-content {
     position: relative; /* Ensure it flows normally in the document */
-    z-index: 1; /* Lower than topbar/sidebar if necessary */
     width: calc(100% - 250px); /* Adjust based on sidebar width */
     margin-left: 250px; /* Same width as sidebar */
     padding: 20px;
@@ -321,7 +320,6 @@ body {
 .details .todo {
 	position: relative;
 	display: grid;
-	min-height: 500px;
 	background: var(--white);
 	padding: 20px;
 	box-shadow: 0 7px 25px rgba(0,0,0,0.08);
@@ -332,20 +330,12 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
+	margin-bottom: 10px;
 }
 
 .cardHeader h2 {
 	font-weight: 600;
 	color: var(--blue);
-}
-
-.btn {
-	position: relative;
-	padding: 5px 10px;
-	background: var(--blue);
-	text-decoration: none;
-	color: var(--white);
-	border-radius: 6px;
 }
 
 

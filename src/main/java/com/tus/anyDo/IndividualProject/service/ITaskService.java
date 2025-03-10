@@ -14,4 +14,8 @@ public interface ITaskService {
     List<Task> getTasksByStatus(TaskStatus status);
 
     List<Task> getTasksByProject(Long projectId);
+    
+    void deleteTask(Long taskId);
+
+	Task getTaskById(Long taskId);
 }

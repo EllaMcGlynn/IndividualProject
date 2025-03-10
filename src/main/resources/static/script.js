@@ -2,7 +2,7 @@ $(document).ready(function() {
     checkAuthentication();
 
     function checkAuthentication() {
-        const token = localStorage.getItem("jwtToken");
+        const token = JwtStorage.getJwt();
 
         if (!token) {
             loadLoginPage();
@@ -84,7 +84,7 @@ $(document).ready(function() {
                     data: JSON.stringify({ username, password }),
                     success: function(response) {
                         console.log("Jwt: " + response.jwt);
-                        localStorage.setItem("jwtToken", response.jwt);
+						JwtStorage.saveJwt(response.jwt);
                         localStorage.setItem("username", username);
 
                         loadHomePage();
@@ -104,29 +104,14 @@ $(document).ready(function() {
         $('#username').text(username);
     }
 
-    // Load Pomodoro page dynamically into loaded-content
-    function loadPomodoroPage() {
-        $("#loaded-content").load("components/pomodoro.html", function(response, status, xhr) {
-            if (status === "error") {
-                console.error("Error loading Pomodoro timer:", xhr.status, xhr.statusText);
-            }
-        });
-    }
 
-    // Initialize homepage event listeners (including logout)
     function initializeHomePageEventListeners() {
-        // Add event listener for Pomodoro link
-        $('#pomodoro-link').on('click', function() {
-            loadPomodoroPage();
-        });
-
-        // Add event listener for Logout link
         $("#logout-link").on("click", function(e) {
             e.preventDefault();
             localStorage.removeItem("jwtToken");
             localStorage.removeItem("username");
 
-            loadLoginPage(); // Reload the login page
+            loadLoginPage(); 
         });
     }
 });
