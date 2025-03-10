@@ -1,11 +1,14 @@
 package com.tus.anyDo.IndividualProject.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RestController
-@RequestMapping("/other")
+@Controller
 public class AnyDoApplicationController {
 
+	@GetMapping("/")
+    public String loadIndexPage() {
+        return "index.html"; 
+    }
 }
 

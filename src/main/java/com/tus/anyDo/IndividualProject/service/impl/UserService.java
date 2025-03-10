@@ -36,4 +36,10 @@ public class UserService implements IUserService {
         }
         userRepository.save(user);
     }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found")); // Handle this exception as needed
+    }
 }

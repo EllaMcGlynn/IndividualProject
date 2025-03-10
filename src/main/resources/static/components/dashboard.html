@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- DataTables CSS -->
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+</head>
+<body>
+	<script
+		src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+	<div id="dashboard">
+		<div class="cardBox">
+			<div class="card">
+				<div>
+					<div class="numbers">Total tasks to do</div>
+					<div class="cardName">Uncompleted Tasks</div>
+				</div>
+				<div class="iconBx">
+					<i class="bi bi-list-task"></i>
+				</div>
+			</div>
+			<div class="card">
+				<div>
+					<div class="numbers">Total amount of completed</div>
+					<div class="cardName">Completed Tasks</div>
+				</div>
+				<div class="iconBx">
+					<i class="bi bi-check2-square"></i>
+				</div>
+			</div>
+			<div class="card">
+				<div>
+					<div class="numbers">Total amount of tasks figures</div>
+					<div class="cardName">Total Tasks</div>
+				</div>
+				<div class="iconBx">
+					<i class="bi bi-list-task"></i>
+				</div>
+			</div>
+			<div class="card">
+				<div>
+					<div class="numbers">Date</div>
+					<div class="cardName">Date</div>
+				</div>
+				<div class="iconBx">
+					<i class="bi bi-list-task"></i>
+				</div>
+			</div>
+		</div>
+
+		<!-- To do list -->
+		<div class="details">
+			<div class="todo">
+				<div class="cardHeader">
+					<h2>Your Tasks</h2>
+					<a href="#" class="btn">New Task</a>
+				</div>
+				<table id="taskTable" class="display">
+					<thead>
+						<tr>
+							<th>To Do</th>
+							<th>Project</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>John Doe</td>
+							<td>Website Redesign</td>
+							<td>In Progress</td>
+							<td><button>Edit</button>
+								<button>Delete</button></td>
+						</tr>
+						<tr>
+							<td>Jane Smith</td>
+							<td>App Development</td>
+							<td>Completed</td>
+							<td><button>Edit</button>
+								<button>Delete</button></td>
+						</tr>
+						<tr>
+							<td>Mark Johnson</td>
+							<td>SEO Optimization</td>
+							<td>Pending</td>
+							<td><button>Edit</button>
+								<button>Delete</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<script>
+        $(document).ready( function () {
+            $('#taskTable').DataTable({
+                "paging": true,       // Enables pagination
+                "searching": true,    // Enables search bar
+                "ordering": true,     // Enables sorting
+                "info": true          // Shows table info
+            });
+        });
+    </script>
+</body>
+</html>
