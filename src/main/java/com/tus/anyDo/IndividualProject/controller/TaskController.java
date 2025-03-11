@@ -3,6 +3,7 @@ package com.tus.anyDo.IndividualProject.controller;
 import com.tus.anyDo.IndividualProject.dto.TaskCreateRequest;
 import com.tus.anyDo.IndividualProject.dto.TaskResponseDto;
 import com.tus.anyDo.IndividualProject.dto.TaskUpdateRequest;
+import com.tus.anyDo.IndividualProject.exception.UserNotFoundException;
 import com.tus.anyDo.IndividualProject.mapper.TaskMapper;
 import com.tus.anyDo.IndividualProject.model.Project;
 import com.tus.anyDo.IndividualProject.model.Task;
@@ -39,15 +40,15 @@ public class TaskController {
 	// Endpoint for creating a task
 	@PostMapping("/add")
 	public ResponseEntity<TaskResponseDto> createTask(@RequestHeader("Authorization") String token,
-			@RequestBody TaskCreateRequest taskCreateRequest) {
+			@RequestBody TaskCreateRequest taskCreateRequest) throws UserNotFoundException {
 		// Extract the username from the JWT token
 		String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
 
 		// Retrieve the user by their username
 		User user = userService.getUserByUsername(username);
-
+		
 		// Create the task and associate it with the user, project (if any), and status
-		Task task = taskService.createTask(username, taskCreateRequest.getName(), taskCreateRequest.getProjectId(),
+		Task task = taskService.createTask(user, taskCreateRequest.getName(), taskCreateRequest.getProjectId(),
 				taskCreateRequest.getStatus());
 
 		TaskResponseDto taskResponseDto = new TaskResponseDto();
@@ -59,7 +60,7 @@ public class TaskController {
 
 	// Endpoint to get all tasks for the logged-in user
 	@GetMapping("/list")
-	public ResponseEntity<List<Task>> getTasks(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<List<Task>> getTasks(@RequestHeader("Authorization") String token) throws UserNotFoundException {
 		// Extract the username from the JWT token
 		String username = jwtService.extractUsername(token.substring(7));
 
@@ -100,36 +101,36 @@ public class TaskController {
 	}
 	
 	
-	 @GetMapping("/{taskId}")
-	    public ResponseEntity<TaskResponseDto> getTaskById(@RequestHeader("Authorization") String token,
-	                                                       @PathVariable Long taskId) {
-	        // Extract the username from the JWT token
-	        String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
+	@GetMapping("/{taskId}")
+    public ResponseEntity<TaskResponseDto> getTaskById(@RequestHeader("Authorization") String token,
+                                                       @PathVariable Long taskId) {
+        // Extract the username from the JWT token
+        String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
 
-	        // Retrieve the task by its ID
-	        Task task = taskService.getTaskById(taskId);
+        // Retrieve the task by its ID
+        Task task = taskService.getTaskById(taskId);
 
-	        // Check if the task exists
-	        if (task == null) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Task not found
-	        }
+        // Check if the task exists
+        if (task == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Task not found
+        }
 
-	        // Check if the task belongs to the logged-in user
-	        if (!task.getUser().getUsername().equals(username)) {
-	            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // User does not have permission
-	        }
+        // Check if the task belongs to the logged-in user
+        if (!task.getUser().getUsername().equals(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // User does not have permission
+        }
 
-	        // Convert the task to a response DTO
-	        TaskResponseDto taskResponseDto = new TaskResponseDto();
-	        TaskMapper.toTaskResponseDto(task, taskResponseDto);
+        // Convert the task to a response DTO
+        TaskResponseDto taskResponseDto = new TaskResponseDto();
+        TaskMapper.toTaskResponseDto(task, taskResponseDto);
 
-	        // Return the task as a response entity with an OK status
-	        return ResponseEntity.status(HttpStatus.OK).body(taskResponseDto);
-	    }
+        // Return the task as a response entity with an OK status
+        return ResponseEntity.status(HttpStatus.OK).body(taskResponseDto);
+    }
 	
 	@PutMapping("/update/{taskId}")
 	public ResponseEntity<TaskResponseDto> updateTask(@RequestHeader("Authorization") String token,
-	        @PathVariable Long taskId, @RequestBody TaskUpdateRequest taskUpdateRequest) {
+	        @PathVariable Long taskId, @RequestBody TaskUpdateRequest taskUpdateRequest) throws UserNotFoundException {
 	    // Extract the username from the JWT token
 	    String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
 

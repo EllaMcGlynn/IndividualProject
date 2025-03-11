@@ -42,6 +42,7 @@ $(document).ready(function() {
     $(".numbers#currentDate").text(formattedDate);
 });
 
+
 // Create New Project
 function createProject() {
     const projectData = {
@@ -50,7 +51,7 @@ function createProject() {
     };
 
     $.ajax({
-        url: "api/projects/add",
+        url: "api/projects",
         type: "POST",
         headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
         contentType: "application/json",
@@ -94,7 +95,7 @@ function createTask() {
 // Load Projects
 function loadProjects() {
     $.ajax({
-        url: "api/projects/list",
+        url: "api/projects",
         type: "GET",
         headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
         success: function(response) {

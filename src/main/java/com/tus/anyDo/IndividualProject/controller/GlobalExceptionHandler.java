@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.tus.anyDo.IndividualProject.exception.InvalidCredentialsException;
 import com.tus.anyDo.IndividualProject.exception.UserAlreadyExistsException;
+import com.tus.anyDo.IndividualProject.exception.UserNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -36,4 +37,9 @@ public class GlobalExceptionHandler {
         
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+    
+    @ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+	}
 }

@@ -41,7 +41,7 @@ public class JwtService implements IJwtService {
 		
 		return Jwts.builder().setSubject(username).claim("role", role.getAuthority())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1-hour expiration
+				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1-hour expiration
 				.signWith(getSigningKey(), SignatureAlgorithm.HS256) // SHA-256 signing
 				.compact();
 	}

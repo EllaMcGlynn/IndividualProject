@@ -9,6 +9,7 @@ import com.tus.anyDo.IndividualProject.constants.UserMessages;
 import com.tus.anyDo.IndividualProject.dao.UserRepository;
 import com.tus.anyDo.IndividualProject.dto.UserRegisterRequest;
 import com.tus.anyDo.IndividualProject.exception.UserAlreadyExistsException;
+import com.tus.anyDo.IndividualProject.exception.UserNotFoundException;
 import com.tus.anyDo.IndividualProject.model.User;
 import com.tus.anyDo.IndividualProject.service.IUserService;
 
@@ -38,8 +39,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public User getUserByUsername(String username) throws UserNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found")); // Handle this exception as needed
+                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found")); // Handle this exception as needed
     }
 }

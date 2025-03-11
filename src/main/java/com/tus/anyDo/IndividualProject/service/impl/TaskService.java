@@ -1,6 +1,7 @@
 package com.tus.anyDo.IndividualProject.service.impl;
 
 import com.tus.anyDo.IndividualProject.dao.TaskRepository;
+import com.tus.anyDo.IndividualProject.exception.UserNotFoundException;
 import com.tus.anyDo.IndividualProject.model.Task;
 import com.tus.anyDo.IndividualProject.model.TaskStatus;
 import com.tus.anyDo.IndividualProject.model.User;
@@ -27,10 +28,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task createTask(String username, String taskName, Long projectId, TaskStatus status) {
-        // Retrieve the User object by username
-        User user = userService.getUserByUsername(username);
-        
+    public Task createTask(User user, String taskName, Long projectId, TaskStatus status) {
         // Retrieve the Project object by projectId (may be null if no project is assigned)
         Project project = (projectId != null) ? projectService.getProjectById(projectId) : null;
 
