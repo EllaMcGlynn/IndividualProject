@@ -9,41 +9,35 @@
 		<div class="cardBox">
 			<div class="card">
 				<div>
-					<div class="numbers">Total tasks to do</div>
+					<div class="numbers" id="uncompletedTasks"></div>
 					<div class="cardName">Uncompleted Tasks</div>
 				</div>
 				<div class="iconBx">
-					<i class="bi bi-list-task"></i>
+					<i class="bi bi-list-stars"></i>
 				</div>
 			</div>
+
 			<div class="card">
 				<div>
-					<div class="numbers">Total amount of completed</div>
-					<div class="cardName">Completed Tasks</div>
+					<div class="numbers" id="projectAmount"></div>
+					<div class="cardName">Total Projects</div>
 				</div>
 				<div class="iconBx">
-					<i class="bi bi-check2-square"></i>
+					<i class="bi bi-kanban"></i>
 				</div>
 			</div>
+
 			<div class="card">
 				<div>
-					<div class="numbers">Total amount of tasks figures</div>
-					<div class="cardName">Total Tasks</div>
-				</div>
-				<div class="iconBx">
-					<i class="bi bi-list-task"></i>
-				</div>
-			</div>
-			<div class="card">
-				<div>
-					<div class="numbers">Date</div>
+					<div class="numbers" id="currentDate">Date</div>
 					<div class="cardName">Date</div>
 				</div>
 				<div class="iconBx">
-					<i class="bi bi-list-task"></i>
+					<i class="bi bi-calendar"></i>
 				</div>
 			</div>
 		</div>
+		
 
 		<!-- To do list -->
 		<div class="details">
@@ -87,10 +81,6 @@
 								type="text" class="form-control" id="taskName" required>
 						</div>
 						<div class="mb-3">
-							<label for="taskProject" class="form-label">Project</label> <input
-								type="text" class="form-control" id="taskProject">
-						</div>
-						<div class="mb-3">
 							<label for="taskStatus" class="form-label">Status</label> <select
 								class="form-select" id="taskStatus">
 								<option value="TODO">To Do</option>
@@ -120,10 +110,6 @@
 						<div class="mb-3">
 							<label for="editTaskName" class="form-label">Task Name</label> <input
 								type="text" class="form-control" id="editTaskName" required>
-						</div>
-						<div class="mb-3">
-							<label for="editTaskProject" class="form-label">Project</label> <input
-								type="text" class="form-control" id="editTaskProject">
 						</div>
 						<div class="mb-3">
 							<label for="editTaskStatus" class="form-label">Status</label> <select
@@ -163,6 +149,6 @@
 		</div>
 	</div>
 
-	<script src="/js/dashboard.js"></script>
+	<script src="/js/teamworkerHome.js"></script>
 </body>
 </html>

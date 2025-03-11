@@ -23,10 +23,10 @@ $(document).ready(function() {
 
 	list.forEach((item) => item.addEventListener('mouseover', activeLink)); 
 	
-	$("#loaded-content").load("components/dashboard.html"); 
+	$("#loaded-content").load("components/teamworkerHome.html"); 
 	$("#dashboard-link").on("click", function(e) { 
 		e.preventDefault(); 
-		$("#loaded-content").load("components/dashboard.html");
+		$("#loaded-content").load("components/teamworkerHome.html");
 	}); 
 	
 	
