@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class TaskUpdateRequest {
     private String taskName;
-    private String projectName;
+    private Long projectId; 
     private TaskStatus status;
 }

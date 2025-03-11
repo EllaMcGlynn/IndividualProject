@@ -29,6 +29,18 @@ $(document).ready(function() {
 		$("#loaded-content").load("components/teamworkerHome.html");
 	}); 
 	
+	$("#loaded-content").load("components/managerHome.html"); 
+		$("#dashboardManager-link").on("click", function(e) { 
+			e.preventDefault(); 
+			$("#loaded-content").load("components/managerHome.html");
+		}); 
+	
+	$("#loaded-content").load("components/teamCreation.html"); 
+		$("#teamCreation-link").on("click", function(e) { 
+			e.preventDefault(); 
+			$("#loaded-content").load("components/teamCreation.html");
+		}); 
+	
 	
 	$("#pomodoro-link").on("click", function(e) { 
 		e.preventDefault();

@@ -23,6 +23,11 @@ $(document).ready(function() {
 		const taskId = $(this).data("id");
 		openDeleteTaskModal(taskId);
 	});
+	
+	$('.modal-footer .btn-secondary').on('click', function() {
+	    $('#deleteTaskModal').modal('hide');
+	});
+
 
 	loadTasks();
 
@@ -119,6 +124,63 @@ function renderTasks(tasks) {
 function showErrorMessage(message) {
 	alert(message);
 }
+
+// Open Edit Task Modal with task data
+function openEditTaskModal(taskId) {
+    $.ajax({
+        url: `/api/tasks/${taskId}`,
+        type: 'GET',
+        headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
+        success: function(task) {
+            // Populate the form fields with the task data
+            $("#editTaskName").val(task.taskName);
+            $("#editTaskStatus").val(task.status);
+            $("#editTaskModal").data('taskId', taskId);
+
+            const myModal = new bootstrap.Modal($("#editTaskModal")[0]);
+            myModal.show();
+        },
+        error: function() {
+            showErrorMessage("Error loading task details.");
+        }
+    });
+}
+
+// Handle Task Update
+$("#editTaskModal form").on("submit", function(event) {
+    event.preventDefault();
+
+    const taskId = $("#editTaskModal").data('taskId');
+    const updatedTask = {
+        taskName: $("#editTaskName").val(),
+        status: $("#editTaskStatus").val(),
+        // Include projectId if applicable
+        projectId: $("#editTaskProject").val() || null
+    };
+
+    // Send an AJAX request to update the task
+    $.ajax({
+        url: `/api/tasks/update/${taskId}`,
+        type: 'PUT',
+        headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
+        contentType: "application/json",
+        data: JSON.stringify(updatedTask),
+        success: function(response) {
+            // Hide the modal and reset form
+            $("#editTaskModal").modal("hide");
+            loadTasks(); // Reload the tasks
+        },
+        error: function(xhr) {
+            if (xhr.status === 404) {
+                showErrorMessage("Task not found.");
+            } else if (xhr.status === 403) {
+                showErrorMessage("You do not have permission to update this task.");
+            } else {
+                showErrorMessage("Error updating task, please try again.");
+            }
+        }
+    });
+});
 
 function openDeleteTaskModal(taskId) {
 	$('#deleteTaskModal').data('taskId', taskId).modal('show');

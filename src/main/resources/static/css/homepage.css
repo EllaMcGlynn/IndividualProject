@@ -11,11 +11,11 @@
 }
 
 :root {
-	--blue: #287bff;
+	--blue: #5995fd;
 	--white: #fff;
-	--grey: #f5f5f5;
+	--grey: #f0f0f0;
 	--black: #222;
-	--darkgrey: #999;
+	--darkgrey: #acacac;
 }
 
 body {
@@ -250,7 +250,7 @@ body {
 	transition: background 0.3s, color 0.3s;
 	align-items: center; /*-----------------*/
 	overflow: hidden; /* Hide overflow content */
-  flex-wrap: wrap; /* Allow wrapping of text */
+	flex-wrap: wrap; /* Allow wrapping of text */
 }
 
 .cardBox .card .numbers {
@@ -314,4 +314,61 @@ body {
 .cardHeader h2 {
 	font-weight: 600;
 	color: var(--blue);
+}
+
+.btn {
+	width: 100px;
+	border: none;
+	outline: none;
+	height: 40px;
+	border-radius: 49px;
+	color: #fff;
+	text-transform: uppercase;
+	font-weight: 600;
+	margin: 10px 0;
+	cursor: pointer;
+	transition: 0.5s;
+}
+
+.btn-primary {
+	background-color: var(--blue);
+}
+
+.btn-close {
+	background: transparent;
+	border: none;
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #000;
+	opacity: 0.7;
+	padding: 0.5rem;
+}
+
+.modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.form-label {
+	font-weight: 600;
+	font-size: 1.1rem;
+	color: #333;
+}
+
+.form-select {
+	padding: 10px;
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease;
+	background-color: #f9f9f9;
+}
+
+.form-select option {
+	padding: 10px;
+}
+
+.form-select option:hover {
+	background-color: #f1f1f1;
 }

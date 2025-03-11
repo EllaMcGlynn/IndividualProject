@@ -18,4 +18,6 @@ public interface ITaskService {
     void deleteTask(Long taskId);
 
 	Task getTaskById(Long taskId);
+
+	Task updateTask(Task task);
 }

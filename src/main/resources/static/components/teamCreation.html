@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Creation</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">Team Creation</h1>
+        <div class="container p-4 border rounded bg-light">
+            <form id="team-form" class="mb-4">
+                <div class="mb-3">
+                    <label for="employee" class="form-label">Select Employee</label>
+                    <select id="employee" name="employee" class="form-select">
+                        <option value="John">John Doe</option>
+                        <option value="Jane">Jane Smith</option>
+                        <option value="Paul">Paul Green</option>
+                        <option value="Mary">Mary White</option>
+                        <option value="Mike">Mike Brown</option>
+                        <option value="Anna">Anna Lee</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="team" class="form-label">Select Team</label>
+                    <select id="team" name="team" class="form-select">
+                        <option value="Team A">Team A</option>
+                        <option value="Team B">Team B</option>
+                        <option value="Team C">Team C</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary w-100" onclick="assignTeam()">Assign to Team</button>
+            </form>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Team A</h3>
+                        <ul id="team-a-list" class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Team B</h3>
+                        <ul id="team-b-list" class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Team C</h3>
+                        <ul id="team-c-list" class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function assignTeam() {
+            var employee = document.getElementById("employee").value;
+            var team = document.getElementById("team").value;
+            var teamListId = team.toLowerCase().replace(" ", "-") + "-list";
+
+            var listItem = document.createElement("li");
+            listItem.textContent = employee;
+            listItem.classList.add("list-group-item");
+
+            document.getElementById(teamListId).appendChild(listItem);
+            document.getElementById("team-form").reset();
+        }
+    </script>
+</body>
+</html>

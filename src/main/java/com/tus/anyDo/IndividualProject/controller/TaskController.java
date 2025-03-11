@@ -99,5 +99,87 @@ public class TaskController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
+	
+	 @GetMapping("/{taskId}")
+	    public ResponseEntity<TaskResponseDto> getTaskById(@RequestHeader("Authorization") String token,
+	                                                       @PathVariable Long taskId) {
+	        // Extract the username from the JWT token
+	        String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
+
+	        // Retrieve the task by its ID
+	        Task task = taskService.getTaskById(taskId);
+
+	        // Check if the task exists
+	        if (task == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Task not found
+	        }
+
+	        // Check if the task belongs to the logged-in user
+	        if (!task.getUser().getUsername().equals(username)) {
+	            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // User does not have permission
+	        }
+
+	        // Convert the task to a response DTO
+	        TaskResponseDto taskResponseDto = new TaskResponseDto();
+	        TaskMapper.toTaskResponseDto(task, taskResponseDto);
+
+	        // Return the task as a response entity with an OK status
+	        return ResponseEntity.status(HttpStatus.OK).body(taskResponseDto);
+	    }
+	
+	@PutMapping("/update/{taskId}")
+	public ResponseEntity<TaskResponseDto> updateTask(@RequestHeader("Authorization") String token,
+	        @PathVariable Long taskId, @RequestBody TaskUpdateRequest taskUpdateRequest) {
+	    // Extract the username from the JWT token
+	    String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
+
+	    // Retrieve the user by their username
+	    User user = userService.getUserByUsername(username);
+
+	    // Retrieve the existing task by its ID
+	    Task task = taskService.getTaskById(taskId);
+	    
+	    // Check if the task exists and if the user has permission to update it
+	    if (task == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    }
+	    
+	    if (!task.getUser().getUsername().equals(username)) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+	    }
+
+	    // Update the task's properties with the new values from the request
+	    if (taskUpdateRequest.getTaskName() != null) {
+	        task.setTaskName(taskUpdateRequest.getTaskName());
+	    }
+
+	    if (taskUpdateRequest.getProjectId() != null) {
+	        // Retrieve the project by ID
+	        Project project = projectService.getProjectById(taskUpdateRequest.getProjectId());
+	        
+	        if (project != null) {
+	            task.setProject(project); // Set the project object, not just the projectId
+	        } else {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // If project doesn't exist
+	        }
+	    }
+
+	    if (taskUpdateRequest.getStatus() != null) {
+	        task.setStatus(taskUpdateRequest.getStatus());
+	    }
+
+	    // Save the updated task
+	    taskService.updateTask(task);
+
+	    // Convert the updated task to a response DTO
+	    TaskResponseDto taskResponseDto = new TaskResponseDto();
+	    TaskMapper.toTaskResponseDto(task, taskResponseDto);
+
+	    // Return the updated task as a response entity with an OK status
+	    return ResponseEntity.status(HttpStatus.OK).body(taskResponseDto);
+	}
+
+
+
 
 }

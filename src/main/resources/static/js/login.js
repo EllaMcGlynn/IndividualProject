@@ -77,9 +77,13 @@ $(document).ready(function () {
 				JwtStorage.saveJwt(response.jwt);
 				showMessage("Registration successful!", "success");
 			},
-	        error: function () {
-				console.log("Error registering user");
-				showMessage("Error during registration. Please try again.", "error");
+	        error: function (response) {
+				if (response.status === 409) {
+					showMessage("Username already taken. Please try again.", "error");	
+				} else {
+					console.log("Error registering user");
+					showMessage("Error during registration. Please try again.", "error");	
+				}
 			}
 	    });	
 	});

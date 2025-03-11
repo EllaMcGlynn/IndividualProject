@@ -16,7 +16,7 @@ import com.tus.anyDo.IndividualProject.exception.UserAlreadyExistsException;
 public class GlobalExceptionHandler {
 	@ExceptionHandler(UserAlreadyExistsException.class)
 	public ResponseEntity<String> jkla(UserAlreadyExistsException e) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 	}
 	
 	@ExceptionHandler(InvalidCredentialsException.class)

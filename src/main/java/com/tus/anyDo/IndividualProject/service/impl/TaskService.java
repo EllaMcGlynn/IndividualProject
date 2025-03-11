@@ -74,5 +74,10 @@ public class TaskService implements ITaskService {
     public Task getTaskById(Long taskId) {
         return taskRepository.findById(taskId).orElse(null); 
     }
+
+	@Override
+	public Task updateTask(Task task) {
+		return taskRepository.save(task);
+	}
 }
 
