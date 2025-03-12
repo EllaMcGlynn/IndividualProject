@@ -39,8 +39,28 @@
 		</div>
 	</div>
 
-	<!-- Project Creation -->
 	<div class="details">
+		<!-- Task Creation -->
+		<div class="todo">
+			<div class="cardHeader">
+				<h2>Create Tasks</h2>
+				<button id="openCreateTasktModal" class="btn btn-primary">New</button>
+			</div>
+			<table id="task-table" class="table">
+				<thead>
+					<tr>
+						<th>Task Name</th>
+						<th>Assigned Project</th>
+						<th>Assigned Person</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Body should populate -->
+				</tbody>
+			</table>
+		</div>
+		<!-- Project Creation -->
 		<div class="todo">
 			<div class="cardHeader">
 				<h2>Your Projects</h2>
@@ -50,7 +70,6 @@
 				<thead>
 					<tr>
 						<th>Project Name</th>
-						<th>Team Assigned</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -79,43 +98,11 @@
 							<input type="text" id="project-name" name="project-name"
 								class="form-control" placeholder="Enter Project Name">
 						</div>
-						<div class="mb-3">
-							<label for="select-team" class="form-label">Select team</label> <select
-								id="select-team" name="select-team" class="form-select"
-								onchange="updateTeamMembers()">
-								<option value="Team A">Team A</option>
-								<option value="Team B">Team B</option>
-								<option value="Team C">Team C</option>
-							</select>
-						</div>
 						<button type="button" class="btn btn-primary mb-4"
 							onclick="createProject()">Create</button>
 					</form>
 				</div>
 			</div>
-		</div>
-	</div>
-
-	<!-- Task Creation -->
-	<div class="details">
-		<div class="todo">
-			<div class="cardHeader">
-				<h2>Create Tasks</h2>
-				<button id="openCreateTasktModal" class="btn btn-primary">New</button>
-			</div>
-			<table id="task-table" class="table">
-				<thead>
-					<tr>
-						<th>Task Name</th>
-						<th>Assigned Project</th>
-						<th>Assigned Person</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- Body should populate -->
-				</tbody>
-			</table>
 		</div>
 	</div>
 
@@ -157,148 +144,8 @@
 			</div>
 		</div>
 	</div>
-<script src="/js/managerHome.js"></script>
+	<script src="/js/managerHome.js"></script>
 
-	<script>
-	document.addEventListener("DOMContentLoaded", function () {
-	    // Store projects, tasks, and team member lists
-	    const projects = [];
-	    const tasks = [];
-
-	    const teamMembers = {
-	        "Team A": ["John Doe", "Jane Smith", "Paul Green"],
-	        "Team B": ["Mary White", "Mike Brown", "Anna Lee"],
-	        "Team C": ["James Taylor", "Olivia Davis", "Liam Johnson"]
-	    };
-
-	    const newProjectModal = new bootstrap.Modal(document.getElementById('newProjectModal'));
-	    const newTaskModal = new bootstrap.Modal(document.getElementById('newCreateTaskModal'));
-
-	    document.getElementById("openProjectModal").addEventListener("click", function () {
-	        newProjectModal.show();
-	    });
-
-	    document.getElementById("openCreateTasktModal").addEventListener("click", function () {
-	        newTaskModal.show();
-	    });
-
-	    document.querySelector("#newProjectModal .btn-close").addEventListener("click", function () {
-	        newProjectModal.hide();
-	    });
-
-	    document.querySelector("#newCreateTaskModal .btn-close").addEventListener("click", function () {
-	        newTaskModal.hide();
-	    });
-
-	    function createProject() {
-	        const projectName = document.getElementById("project-name").value;
-	        const selectedTeam = document.getElementById("select-team").value;
-
-	        if (projectName.trim() !== "") {
-	            const project = { name: projectName, team: selectedTeam };
-	            projects.push(project);
-	            updateProjectTable();
-	            updateProjectSelectOptions();
-	            document.getElementById("project-name").value = ''; // Clear input field
-	            newProjectModal.hide();
-	        }
-	    }
-
-	    function updateProjectTable() {
-	        const projectTableBody = document.querySelector("#project-table tbody");
-	        projectTableBody.innerHTML = '';
-
-	        projects.forEach((project, index) => {
-	            const row = document.createElement('tr');
-	            row.innerHTML = `
-	                <td>${project.name}</td>
-	                <td>${project.team}</td>
-	                <td><button class="btn btn-danger" onclick="deleteProject(${index})">Delete</button></td>
-	            `;
-	            projectTableBody.appendChild(row);
-	        });
-	    }
-
-	    function deleteProject(index) {
-	        projects.splice(index, 1);
-	        updateProjectTable();
-	        updateProjectSelectOptions();
-	    }
-
-	    function updateProjectSelectOptions() {
-	        const projectSelect = document.getElementById("assign-project");
-	        projectSelect.innerHTML = '';
-
-	        projects.forEach((project, index) => {
-	            const option = document.createElement("option");
-	            option.value = index;
-	            option.textContent = project.name;
-	            projectSelect.appendChild(option);
-	        });
-	    }
-
-	    function updateTeamMembers() {
-	        const selectedTeam = document.getElementById("select-team").value;
-	        const personSelect = document.getElementById("assign-person");
-	        personSelect.innerHTML = '';
-
-	        teamMembers[selectedTeam].forEach(member => {
-	            const option = document.createElement("option");
-	            option.value = member;
-	            option.textContent = member;
-	            personSelect.appendChild(option);
-	        });
-	    }
-
-	    function createTask() {
-	        const taskName = document.getElementById("task-name").value;
-	        const projectIndex = document.getElementById("assign-project").value;
-	        const assignedPerson = document.getElementById("assign-person").value;
-
-	        if (taskName.trim() !== "") {
-	            const task = {
-	                name: taskName,
-	                assignedTo: assignedPerson,
-	                project: projects[projectIndex].name
-	            };
-	            tasks.push(task);
-	            updateTaskTable();
-	            document.getElementById("task-name").value = ''; // Clear input field
-	            newTaskModal.hide();
-	        }
-	    }
-
-	    function updateTaskTable() {
-	        const taskTableBody = document.querySelector("#task-table tbody");
-	        taskTableBody.innerHTML = '';
-
-	        tasks.forEach((task, index) => {
-	            const row = document.createElement('tr');
-	            row.innerHTML = `
-	                <td>${task.name}</td>
-	                <td>${task.project}</td>
-	                <td>${task.assignedTo}</td>
-	                <td><button class="btn btn-danger" onclick="deleteTask(${index})">Delete</button></td>
-	            `;
-	            taskTableBody.appendChild(row);
-	        });
-	    }
-
-	    function deleteTask(index) {
-	        tasks.splice(index, 1);
-	        updateTaskTable();
-	    }
-
-	    window.createProject = createProject;
-	    window.deleteProject = deleteProject;
-	    window.createTask = createTask;
-	    window.deleteTask = deleteTask;
-	    window.updateTeamMembers = updateTeamMembers;
-
-	    updateTeamMembers();
-	});
-
-    </script>
 
 </body>
 </html>

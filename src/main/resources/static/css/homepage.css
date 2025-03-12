@@ -372,3 +372,37 @@ body {
 .form-select option:hover {
 	background-color: #f1f1f1;
 }
+
+/*Pomodoro Timer */
+.btn-group {
+	display: flex;
+	flex-direction: row;
+	gap: 10px; 
+}
+
+.timer-display {
+	font-size: 50px;
+	text-align: center;
+	font-weight: bold;
+	padding-bottom: 15px;
+}
+
+#pause-btn {
+	background-color: #f1c40f;
+}
+
+#reset-btn {
+	background-color: #e74c3c;
+}
+
+#break-btn {
+	background-color: #2ecc71;
+}
+
+
+
+
+
+
+
+
