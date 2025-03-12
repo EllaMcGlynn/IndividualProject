@@ -5,10 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProjectResponseDto {
+public class UserResponseDto {
+	private long id;
 	
-	private long projectId;
-	
-	private String projectName;
-
+	private String username;
 }

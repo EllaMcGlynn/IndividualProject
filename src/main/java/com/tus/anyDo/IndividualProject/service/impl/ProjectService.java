@@ -26,4 +26,9 @@ public class ProjectService implements IProjectService {
     public Project getProjectById(Long projectId) {
         return projectRepository.findById(projectId).orElse(null);
     }
+
+	@Override
+	public void deleteProject(long projectID) {
+		projectRepository.deleteById(projectID);
+	}
 }

@@ -11,7 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -29,8 +31,13 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private List<Task> tasks;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
+    
+    public Project() {
+    	
+    }
+
     
 }

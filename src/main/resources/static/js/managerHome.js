@@ -9,10 +9,12 @@ $(document).ready(function() {
     });
 
     // Open New Task Modal
-    $("#openCreateTasktModal").on("click", function() {
-        const myModal = new bootstrap.Modal($("#newCreateTaskModal")[0]);
-        myModal.show();
-    });
+	$("#openCreateTasktModal").on("click", function () {
+	        populateProjecteDropdown();
+			populateUsersDropdown();
+	        const myModal = new bootstrap.Modal($("#newCreateTaskModal")[0]);
+	        myModal.show();
+	    });
 
     // Event delegation for delete buttons in project table
     projectTableBody.on("click", ".delete-project", function() {
@@ -40,18 +42,24 @@ $(document).ready(function() {
 
     // Update the 'cardName' with the current date
     $(".numbers#currentDate").text(formattedDate);
+	
+	
+	// Delete button
+	$(document).on("click", ".delete-project", function () {
+	    let projectId = $(this).attr("data-id");
+	    openDeleteProjectModal(projectId);
+	});
 });
 
 
 // Create New Project
 function createProject() {
     const projectData = {
-        name: $("#project-name").val(),
-        teamAssigned: $("#select-team").val(),
+        projectName: $("#project-name").val(),
     };
 
     $.ajax({
-        url: "api/projects",
+        url: "/api/projects",
         type: "POST",
         headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
         contentType: "application/json",
@@ -76,7 +84,7 @@ function createTask() {
     };
 
     $.ajax({
-        url: "api/tasks/add",
+        url: "/api/tasks/add",
         type: "POST",
         headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
         contentType: "application/json",
@@ -95,7 +103,7 @@ function createTask() {
 // Load Projects
 function loadProjects() {
     $.ajax({
-        url: "api/projects",
+        url: "/api/projects",
         type: "GET",
         headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
         success: function(response) {
@@ -110,7 +118,7 @@ function loadProjects() {
 // Load Tasks
 function loadTasks() {
     $.ajax({
-        url: "api/tasks/list",
+        url: "/api/tasks/list",
         type: "GET",
         headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
         success: function(response) {
@@ -130,10 +138,9 @@ function renderProjects(projects) {
     projects.forEach((project) => {
         const row = `
             <tr>
-                <td>${project.name}</td>
-                <td>${project.teamAssigned}</td>
+                <td>${project.projectName}</td>
                 <td>
-                    <button class="btn btn-sm btn-danger delete-project" data-id="${project.id}">Delete</button>
+                    <button class="btn btn-sm btn-danger delete-project" data-id="${project.projectId}">Delete</button>
                 </td>
             </tr>`;
         projectTableBody.append(row);
@@ -181,6 +188,7 @@ $('#confirmDeleteProjectBtn').on('click', function() {
             success: function() {
                 $('#deleteProjectModal').modal('hide');
                 loadProjects();
+				$('#deleteProjectModal').modal('hide');
             },
             error: function() {
                 showErrorMessage('Error deleting project, please try again.');
@@ -218,4 +226,48 @@ $('#confirmDeleteTaskBtn').on('click', function() {
 // Display error message
 function showErrorMessage(message) {
     alert(message);
+}
+
+function populateProjecteDropdown() {
+    $.ajax({
+        url: "/api/projects",
+		headers: { 'Authorization': `Bearer ${JwtStorage.getJwt()}` },
+        type: "GET",
+        dataType: "json",
+        success: function (projects) {
+            let dropdown = $("#assign-project"); 
+            dropdown.empty(); 
+            dropdown.append('<option value="">Select an option</option>'); 
+
+            // Loop through the response and append options
+            projects.forEach((project) => {
+                dropdown.append(`<option value="${project.projectId}">${project.projectName}</option>`);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data:", error);
+        }
+    });
+}
+
+function populateUsersDropdown() {
+	$.ajax({
+        url: "/api/users",
+		headers: { 'Authorization': `Bearer ${JwtStorage.getJwt()}` },
+        type: "GET",
+        dataType: "json",
+        success: function (users) {
+            let dropdown = $("#assign-person"); 
+            dropdown.empty(); 
+            dropdown.append('<option value="">Select an option</option>'); 
+
+            // Loop through the response and append options
+            users.forEach((user) => {
+                dropdown.append(`<option value="${user.id}">${user.username}</option>`);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data:", error);
+        }
+    });
 }

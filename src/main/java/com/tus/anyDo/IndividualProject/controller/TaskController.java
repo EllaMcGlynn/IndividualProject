@@ -77,7 +77,6 @@ public class TaskController {
 	@DeleteMapping("/{taskId}")
 	public ResponseEntity<Void> deleteTask(@RequestHeader("Authorization") String token,
 			@PathVariable("taskId") Long taskId) {
-		// Extract the username from the JWT token
 		String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
 
 		// Retrieve the task to check ownership and existence

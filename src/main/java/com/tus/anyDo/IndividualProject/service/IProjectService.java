@@ -7,4 +7,6 @@ public interface IProjectService {
     Project createProject(String projectName);
 
     Project getProjectById(Long projectId);
+
+	void deleteProject(long projectID);
 }

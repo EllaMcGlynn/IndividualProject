@@ -1,5 +1,7 @@
 package com.tus.anyDo.IndividualProject.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,7 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -36,6 +40,9 @@ public class Task {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TaskStatus status;
+    
+    public Task() {
+    }
     
     public Task(String taskName, User user, Project project, TaskStatus status) {
     	this.taskName = taskName;
