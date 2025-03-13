@@ -13,7 +13,7 @@
 					<div class="cardName">Total Team Workers</div>
 				</div>
 				<div class="iconBx">
-					<i class="bi bi-list-stars"></i>
+					<i class="bi bi-people"></i>
 				</div>
 			</div>
 
@@ -40,7 +40,7 @@
 	</div>
 
 	<div class="details">
-		<!-- Task Creation --> 
+		<!-- Task Creation -->
 		<div class="todo">
 			<div class="cardHeader">
 				<h2>Create Tasks</h2>
@@ -56,7 +56,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					
+
 				</tbody>
 			</table>
 		</div>
@@ -137,20 +137,30 @@
 								<!-- Person options will be dynamically added here -->
 							</select>
 						</div>
-						<button type="button" class="btn btn-primary mb-4">Create</button>
+						<div class="mb-3">
+							<label for="editTaskStatus" class="form-label">Status</label> <select
+								class="form-select" id="editTaskStatus">
+								<option value="TODO">To Do</option>
+								<option value="IN_PROGRESS">In Progress</option>
+								<option value="DONE">Done</option>
+							</select>
+						</div>
+						<button type="button" class="btn btn-primary mb-4"
+							id="createTaskBtn">Create</button>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Delete Project Modal -->
 	<div class="modal fade" id="deleteProjectModal" tabindex="-1"
 		aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="deleteProjectModalLabel">Delete Project</h5>
+					<h5 class="modal-title" id="deleteProjectModalLabel">Delete
+						Project</h5>
 					<button type="button" class="btn-close" data-dismiss="modal"
 						aria-label="Close">&times;</button>
 				</div>
@@ -166,14 +176,15 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Delete Task Modal -->
 	<div class="modal fade" id="deleteCreateTaskModal" tabindex="-1"
-		aria-labelledby="deleteCreateTaskModalLabel" >
+		aria-labelledby="deleteCreateTaskModalLabel">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="deleteCreateTaskModalLabel">Delete Project</h5>
+					<h5 class="modal-title" id="deleteCreateTaskModalLabel">Delete
+						Project</h5>
 					<button type="button" class="btn-close" data-dismiss="modal"
 						aria-label="Close">&times;</button>
 				</div>
@@ -185,6 +196,34 @@
 						data-bs-dismiss="modal">Cancel</button>
 					<button type="button" class="btn btn-danger"
 						id="confirmDeleteCreateTaskBtn">Delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Edit Project Modal -->
+	<div class="modal fade" id="editProjectModal" tabindex="-1"
+		aria-labelledby="editProjectModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editProjectModalLabel">Edit
+						Project</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="mb-3">
+							<label for="edit-project-name" class="form-label">Project
+								Name</label> <input type="text" id="edit-project-name"
+								name="edit-project-name" class="form-control"
+								placeholder="Enter Project Name" value="">
+						</div>
+						<button type="button" class="btn btn-primary mb-4"
+							onclick="updateProject()">Save</button>
+					</form>
 				</div>
 			</div>
 		</div>

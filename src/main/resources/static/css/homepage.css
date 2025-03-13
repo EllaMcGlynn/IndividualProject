@@ -387,20 +387,14 @@ body {
 	padding-bottom: 15px;
 }
 
-#pause-btn {
-	background-color: #f1c40f;
-}
 
 #reset-btn {
-	background-color: #e74c3c;
+	background-color: #f1c40f;
 }
 
 #break-btn {
 	background-color: #2ecc71;
 }
-
-
-
 
 
 

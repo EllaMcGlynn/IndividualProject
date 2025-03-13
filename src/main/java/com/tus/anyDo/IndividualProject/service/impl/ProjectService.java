@@ -31,4 +31,9 @@ public class ProjectService implements IProjectService {
 	public void deleteProject(long projectID) {
 		projectRepository.deleteById(projectID);
 	}
+
+	@Override
+	public Project updateProject(Project project) {
+		return projectRepository.save(project);
+	}
 }

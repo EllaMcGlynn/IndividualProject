@@ -40,7 +40,6 @@ $(document).ready(function() {
 		e.preventDefault();
 		$("#loaded-content").load("components/pomodoro.html", function() { 
 			console.log("Pomodoro content loaded successfully"); 
-			initializePomodoroTimer(); 
 		}); 
 	}); 
 }); 
