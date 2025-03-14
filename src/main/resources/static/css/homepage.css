@@ -302,6 +302,26 @@ body {
 	padding: 20px;
 	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
 	border-radius: 20px;
+	overflow: auto;
+	min-height: 350px;
+	max-height: 400px;
+}
+
+#taskChart {
+    max-width: 100%;
+    height: 300px !important; /* Adjust height as needed */
+}
+
+.todo-timer {
+	position: relative;
+	display: grid;
+	background: var(--white);
+	padding: 20px;
+	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+	border-radius: 20px;
+	overflow: auto;
+	min-height: 350px;
+	max-height: 500px;
 }
 
 .cardHeader {
@@ -395,8 +415,4 @@ body {
 #break-btn {
 	background-color: #2ecc71;
 }
-
-
-
-
 

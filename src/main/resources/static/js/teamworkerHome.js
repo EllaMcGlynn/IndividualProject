@@ -95,6 +95,7 @@ function loadTasks() {
 
 			populateUncompletedTasksCount(response);
 			populateProjectCount(response);
+			populateTaskChart(response);
 		},
 		error: function() {
 			showErrorMessage("Error loading tasks, please try again.");
@@ -216,3 +217,45 @@ $('#confirmDeleteTaskBtn').on('click', function() {
 		showErrorMessage('No task selected for deletion.');
 	}
 });
+
+
+function populateTaskChart(tasks) {
+    const completedTasks = tasks.filter(task => task.status === "DONE").length;
+    const uncompletedTasks = tasks.filter(task => task.status === "TODO" || task.status === "IN_PROGRESS").length;
+
+    const chartContainer = document.getElementById("taskChart").parentElement;
+    
+    if (tasks.length === 0) {
+        chartContainer.innerHTML = "<p class='no-tasks-msg'>No tasks yet. Start by adding your first task!</p>";
+        return;
+    } else {
+        if (!document.getElementById("taskChart")) {
+            chartContainer.innerHTML = '<canvas id="taskChart"></canvas>';
+        }
+    }
+
+    const ctx = document.getElementById("taskChart").getContext("2d");
+
+    // Destroy previous chart instance if it exists
+    if (window.taskChartInstance) {
+        window.taskChartInstance.destroy();
+    }
+
+    window.taskChartInstance = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: ["Completed", "Uncompleted"],
+            datasets: [{
+                data: [completedTasks, uncompletedTasks],
+                backgroundColor: ["#2ecc71", "#f1c40f"],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: "bottom" }
+            }
+        }
+    });
+}

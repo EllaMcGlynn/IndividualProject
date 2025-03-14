@@ -2,6 +2,7 @@ package com.tus.anyDo.IndividualProject.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,7 +47,7 @@ public class ProjectController {
 		this.userService = userService;
 		this.projectService = projectService;
 	}
-
+	
 	@GetMapping
 	public List<ProjectResponseDto> getProjects(@RequestHeader("Authorization") String token) {
 		String username = jwtService.extractUsername(token.substring(7));
@@ -56,43 +57,38 @@ public class ProjectController {
 			return projectResponseDto;
 		}).toList();
 	}
-
+	
 	@PostMapping
 	public long createProject(@RequestHeader("Authorization") String token,
 			@Valid @RequestBody ProjectCreateRequest projectCreateRequest) throws UserNotFoundException {
 		String username = jwtService.extractUsername(token.substring(7));
 		User user = userService.getUserByUsername(username);
-
 		Project project = new Project();
 		ProjectMapper.toProject(projectCreateRequest, user, project);
 		projectRepository.save(project);
-
 		return project.getId();
 	}
-
+	
 	@DeleteMapping("/{projectId}")
 	public ResponseEntity<Void> deleteProject(@RequestHeader("Authorization") String token,
 			@PathVariable("projectId") long projectId) {
 
 		String username = jwtService.extractUsername(token.substring(7));
-
 		Project project = projectService.getProjectById(projectId);
 
 		if (project == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 
-		// Verify if the task belongs to the user
 		if (!project.getCreator().getUsername().equals(username)) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // User does not have permission
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); 
 		}
 
 		projectService.deleteProject(projectId);
-
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
 	}
-
+	
 	@PutMapping("/update/{projectId}")
 	public ResponseEntity<ProjectResponseDto> updateProject(@RequestHeader("Authorization") String token,
 			@PathVariable Long projectId, @RequestBody ProjectUpdateRequest projectUpdateRequest)
@@ -115,11 +111,8 @@ public class ProjectController {
 	    }
 		
 		projectService.updateProject(project);
-		
-		// Convert the updated task to a response DTO
 	    ProjectResponseDto projectResponseDto = new ProjectResponseDto();
 	    ProjectMapper.toProjectResponseDto(project, projectResponseDto);
-		
 		return ResponseEntity.status(HttpStatus.OK).body(projectResponseDto);
 
 	}
@@ -127,27 +120,20 @@ public class ProjectController {
 	@GetMapping("/{projectId}")
     public ResponseEntity<ProjectResponseDto> getProjectById(@RequestHeader("Authorization") String token,
                                                        @PathVariable Long projectId) {
-        // Extract the username from the JWT token
-        String username = jwtService.extractUsername(token.substring(7)); // Removing the "Bearer " prefix
-
-        // Retrieve the task by its ID
+        
+        String username = jwtService.extractUsername(token.substring(7));
         Project project = projectService.getProjectById(projectId);
-
-        // Check if the task exists
+        
         if (project == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Task not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); 
         }
-
-        // Check if the task belongs to the logged-in user
+        
         if (!project.getCreator().getUsername().equals(username)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // User does not have permission
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); 
         }
 
-        // Convert the task to a response DTO
         ProjectResponseDto projectResponseDto = new ProjectResponseDto();
         ProjectMapper.toProjectResponseDto(project, projectResponseDto);
-
-        // Return the task as a response entity with an OK status
         return ResponseEntity.status(HttpStatus.OK).body(projectResponseDto);
     }
 
