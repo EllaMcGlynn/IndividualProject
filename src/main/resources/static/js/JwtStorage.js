@@ -9,20 +9,23 @@ const JwtStorage = {
 		return localStorage.getItem(this.JWT_KEY);
 	},
 	
-	// Method to extract user role from the JWT
 	getUserRole: function () {
 	    const jwt = this.getJwt();
-	    if (!jwt) {
-	        return null;
-	    }
-	    // Split the JWT into three parts (header, payload, signature)
-	    const payload = jwt.split('.')[1];
+	    if (!jwt) return null;
 
-	    // Decode the payload from Base64 URL encoding
+	    const payload = jwt.split('.')[1];
+	    const decodedPayload = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+	    
+	    return decodedPayload.role || null;
+	},
+
+	getUserId: function () {
+	    const jwt = this.getJwt();
+	    if (!jwt) return null;
+
+	    const payload = jwt.split('.')[1];
 	    const decodedPayload = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
 
-	    // Return the role from the decoded payload (you can change 'role' to whatever the actual key is in your payload)
-	    return decodedPayload.role || null;
+	    return decodedPayload.userId || null;  // Ensure this matches the key in your JWT payload
 	}
-
-}
+};

@@ -1,13 +1,11 @@
 package com.tus.anyDo.IndividualProject.service.impl;
 
 import com.tus.anyDo.IndividualProject.dao.TaskRepository;
-import com.tus.anyDo.IndividualProject.exception.UserNotFoundException;
 import com.tus.anyDo.IndividualProject.model.Task;
 import com.tus.anyDo.IndividualProject.model.TaskStatus;
 import com.tus.anyDo.IndividualProject.model.User;
 import com.tus.anyDo.IndividualProject.model.Project;
 import com.tus.anyDo.IndividualProject.service.ITaskService;
-import com.tus.anyDo.IndividualProject.service.IUserService;
 import com.tus.anyDo.IndividualProject.service.IProjectService;
 import org.springframework.stereotype.Service;
 
@@ -17,23 +15,26 @@ import java.util.List;
 public class TaskService implements ITaskService {
 
     private final TaskRepository taskRepository;
-    private final IUserService userService;
     private final IProjectService projectService;
 
     // Constructor injection for required dependencies
-    public TaskService(TaskRepository taskRepository, IUserService userService, IProjectService projectService) {
+    public TaskService(TaskRepository taskRepository, IProjectService projectService) {
         this.taskRepository = taskRepository;
-        this.userService = userService;
         this.projectService = projectService;
     }
 
     @Override
-    public Task createTask(User user, String taskName, Long projectId, TaskStatus status) {
+    public Task createTask(User user, String taskName, User creator, Long projectId, TaskStatus status) {
         // Retrieve the Project object by projectId (may be null if no project is assigned)
         Project project = (projectId != null) ? projectService.getProjectById(projectId) : null;
 
         // Create a new Task with the given attributes and associations
-        Task task = new Task(taskName, user, project, status);
+        Task task = new Task();
+        task.setCreator(creator);
+        task.setProject(project);
+        task.setStatus(status);
+        task.setTaskName(taskName);
+        task.setUser(user);
 
         // Save the task to the database
         return taskRepository.save(task);
@@ -77,5 +78,32 @@ public class TaskService implements ITaskService {
 	public Task updateTask(Task task) {
 		return taskRepository.save(task);
 	}
+
+
+	@Override
+	public Task assignTask(User manager, String taskName, Project project, User assignedUser, TaskStatus status) {
+	    if (assignedUser == null) {
+	        throw new IllegalArgumentException("Assigned user cannot be null");
+	    }
+
+	    if (taskName == null || taskName.trim().isEmpty()) {
+	        throw new IllegalArgumentException("Task name cannot be empty");
+	    }
+
+	    Task task = new Task();
+	    task.setCreator(manager);
+	    task.setProject(project);
+	    task.setStatus(status);
+	    task.setTaskName(taskName);
+	    task.setUser(assignedUser);
+	    
+	    return taskRepository.save(task);
+	}
+
+	@Override
+	public List<Task> getManagerTasks(User user) {
+		return taskRepository.findByCreator(user);
+	}
+	
 }
 

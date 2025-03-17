@@ -15,16 +15,17 @@ $(document).ready(function() {
 		const myModal = new bootstrap.Modal($("#newCreateTaskModal")[0]);
 		myModal.show();
 	});
-
+	
+	// Create new task
 	$("#createTaskBtn").on("click", function() {
 		createTask();
 	});
 	
 	// Open Edit Project Modal
-		projectTableBody.on("click", ".edit-project", function() {
-			const projectId = $(this).data("id");
-			openEditProjectModal(projectId);
-		});
+	projectTableBody.on("click", ".edit-project", function() {
+		const projectId = $(this).data("id");
+		openEditProjectModal(projectId);
+	});
 
 	// Event delegation for delete buttons in project table
 	projectTableBody.on("click", ".delete-project", function() {
@@ -55,12 +56,12 @@ $(document).ready(function() {
 	// Update the 'cardName' with the current date
 	$(".numbers#currentDate").text(formattedDate);
 
-
 	// Delete button
-	$(document).on("click", ".delete-project", function() {
+	$(document).off("click", ".delete-project").on("click", ".delete-project", function() {
 		let projectId = $(this).attr("data-id");
 		openDeleteProjectModal(projectId);
 	});
+	
 });
 
 function updateProjectCount() {
@@ -127,31 +128,32 @@ function createProject() {
 	});
 }
 
-// Create New Task
+// Create & Assign Task by Manager
 function createTask() {
-	const taskData = {
-		name: $("#task-name").val(),
-		projectId: $("#assign-project").val() || null,
-		assignedPerson: $("#assign-person").val() || null,
-		status: $("#editTaskStatus").val()
-	};
+    const taskData = {
+        taskName: $("#task-name").val(),
+        projectId: $("#assign-project").val(),
+        assignedUser: $("#assign-person").val(),
+        status: $("#editTaskStatus").val()
+    };
 
-	$.ajax({
-		url: "/api/tasks/add",
-		type: "POST",
-		headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
-		contentType: "application/json",
-		data: JSON.stringify(taskData),
-		success: function() {
-			$("#newCreateTaskModal").modal("hide");
-			$("#newCreateTaskModal form").trigger("reset");
-			loadTasks();
-		},
-		error: function() {
-			showErrorMessage("Error creating task, please try again.");
-		},
-	});
+    $.ajax({
+        url: "/api/tasks/manager/add",  
+        type: "POST",
+        headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
+        contentType: "application/json",
+        data: JSON.stringify(taskData),
+        success: function () {
+            $("#newCreateTaskModal").modal("hide");
+            $("#newCreateTaskModal form").trigger("reset");
+            loadTasks();
+        },
+        error: function () {
+            showErrorMessage("Error assigning task, please try again.");
+        },
+    });
 }
+
 
 // Load Projects
 function loadProjects() {
@@ -171,7 +173,7 @@ function loadProjects() {
 // Load Tasks
 function loadTasks() {
 	$.ajax({
-		url: "/api/tasks/list",
+		url: "/api/tasks/manager/list",
 		type: "GET",
 		headers: { Authorization: `Bearer ${JwtStorage.getJwt()}` },
 		success: function(response) {
@@ -209,9 +211,9 @@ function renderTasks(tasks) {
 	tasks.forEach((task) => {
 		const row = `
             <tr>
-                <td>${task.name}</td>
-                <td>${task.projectId || ""}</td>
-                <td>${task.assignedPerson || ""}</td>
+                <td>${task.taskName}</td>
+                <td>${task.projectName || ""}</td>
+                <td>${task.assignedUser || ""}</td>
                 <td>
                     <button class="btn btn-sm btn-danger delete-task" data-id="${task.id}">Delete</button>
                 </td>
@@ -244,6 +246,7 @@ $('#confirmDeleteProjectBtn').on('click', function() {
 				loadProjects();
 				updateProjectCount();
 				$('#deleteProjectModal').modal('hide');
+				loadTasks();
 			},
 			error: function() {
 				showErrorMessage('Error deleting project, please try again.');
@@ -318,7 +321,7 @@ function populateUsersDropdown() {
 
 			// Loop through the response and append options
 			users.forEach((user) => {
-				dropdown.append(`<option value="${user.id}">${user.username}</option>`);
+				dropdown.append(`<option value="${user.username}">${user.username}</option>`);
 			});
 		},
 		error: function(xhr, status, error) {

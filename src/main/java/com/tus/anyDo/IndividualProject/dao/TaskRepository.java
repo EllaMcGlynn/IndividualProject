@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.tus.anyDo.IndividualProject.model.Task;
 import com.tus.anyDo.IndividualProject.model.TaskStatus;
+import com.tus.anyDo.IndividualProject.model.User;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     
     // Find tasks by project
     List<Task> findByProjectId(Long projectId);
+    
+    List<Task> findByCreator(User user);
 }

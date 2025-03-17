@@ -13,6 +13,8 @@ public class TaskResponseDto {
     private String taskName;
 
     private String projectName;
+    
+    private String assignedUser;
 
     private TaskStatus status;
 }

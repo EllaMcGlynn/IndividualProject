@@ -36,7 +36,17 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> 
-            	auth.anyRequest().permitAll() // Allow all requests
+            	auth
+            	.requestMatchers("/api/auth/**").permitAll()
+            	.requestMatchers("/").permitAll()
+            	.requestMatchers("/assets/**").permitAll()
+            	.requestMatchers("/components/**").permitAll()
+            	.requestMatchers("/css/**").permitAll()
+            	.requestMatchers("/js/**").permitAll()
+            	.requestMatchers("/index.html").permitAll()
+            	.requestMatchers("/script.js").permitAll()
+            	.requestMatchers("/styles.css").permitAll()
+            	.anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
             .formLogin(form -> form.disable()) // Disable form login

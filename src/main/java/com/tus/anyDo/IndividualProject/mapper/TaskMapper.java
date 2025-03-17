@@ -15,6 +15,7 @@ public class TaskMapper {
 		}
 		taskResponseDto.setStatus(task.getStatus());
 		taskResponseDto.setTaskName(task.getTaskName());
+		taskResponseDto.setAssignedUser(task.getUser().getUsername());
 	}
 
 }

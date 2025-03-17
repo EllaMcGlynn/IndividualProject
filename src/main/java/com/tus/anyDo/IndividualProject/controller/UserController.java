@@ -2,6 +2,7 @@ package com.tus.anyDo.IndividualProject.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +22,9 @@ public class UserController {
 	}
 	
 	@GetMapping
+	@PreAuthorize("hasRole('PROJECT_MANAGER')")
 	public List<UserResponseDto> getAllUsers() {
-		return userRepository.findByRole(Role.TEAMWORKER).stream()
+		return userRepository.findByRole(Role.ROLE_TEAMWORKER).stream()
 				.map((user) -> {
 					UserResponseDto userResponseDto = new UserResponseDto();
 					UserMapper.toUserResponseDto(user, userResponseDto);

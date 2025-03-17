@@ -34,10 +34,10 @@ $(document).ready(function() {
 	// Update the Date Card with current date
 	const currentDate = new Date();
 	const formattedDate = currentDate.toLocaleDateString("en-GB", {
-		weekday: "long", // Optional: Display the weekday (e.g., "Monday")
-		day: "numeric",  // Day of the month (e.g., "11")
-		month: "long",   // Full month name (e.g., "March")
-		year: "numeric"  // Year (e.g., "2025")
+		weekday: "long",
+		day: "numeric",
+		month: "long",  
+		year: "numeric"  
 	});
 
 	// Update the 'cardName' with the current date
@@ -111,7 +111,7 @@ function renderTasks(tasks) {
 		const row = `
             <tr>
                 <td>${task.taskName}</td>
-                <td>${task.projectId || ""}</td>
+                <td>${task.projectName || ""}</td>
                 <td>${task.status}</td>
                 <td>
                     <button class="btn btn-sm btn-primary edit-task" data-id="${task.id}">Edit</button>
@@ -223,16 +223,16 @@ function populateTaskChart(tasks) {
     const completedTasks = tasks.filter(task => task.status === "DONE").length;
     const uncompletedTasks = tasks.filter(task => task.status === "TODO" || task.status === "IN_PROGRESS").length;
 
-    const chartContainer = document.getElementById("taskChart").parentElement;
+    const chartContainer = $("#taskChart");
     
     if (tasks.length === 0) {
-        chartContainer.innerHTML = "<p class='no-tasks-msg'>No tasks yet. Start by adding your first task!</p>";
+        $("#no-tasks-msg-id").show();
+		chartContainer.hide();
         return;
     } else {
-        if (!document.getElementById("taskChart")) {
-            chartContainer.innerHTML = '<canvas id="taskChart"></canvas>';
-        }
-    }
+		$("#no-tasks-msg-id").hide();
+		chartContainer.show();
+	}
 
     const ctx = document.getElementById("taskChart").getContext("2d");
 

@@ -19,12 +19,9 @@ import com.tus.anyDo.IndividualProject.dao.ProjectRepository;
 import com.tus.anyDo.IndividualProject.dto.ProjectCreateRequest;
 import com.tus.anyDo.IndividualProject.dto.ProjectResponseDto;
 import com.tus.anyDo.IndividualProject.dto.ProjectUpdateRequest;
-import com.tus.anyDo.IndividualProject.dto.TaskResponseDto;
 import com.tus.anyDo.IndividualProject.exception.UserNotFoundException;
 import com.tus.anyDo.IndividualProject.mapper.ProjectMapper;
-import com.tus.anyDo.IndividualProject.mapper.TaskMapper;
 import com.tus.anyDo.IndividualProject.model.Project;
-import com.tus.anyDo.IndividualProject.model.Task;
 import com.tus.anyDo.IndividualProject.model.User;
 import com.tus.anyDo.IndividualProject.service.IJwtService;
 import com.tus.anyDo.IndividualProject.service.IProjectService;
@@ -49,6 +46,7 @@ public class ProjectController {
 	}
 	
 	@GetMapping
+	@PreAuthorize("hasRole('PROJECT_MANAGER')")
 	public List<ProjectResponseDto> getProjects(@RequestHeader("Authorization") String token) {
 		String username = jwtService.extractUsername(token.substring(7));
 		return projectRepository.findByCreator_Username(username).stream().map((project) -> {
@@ -59,6 +57,7 @@ public class ProjectController {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasRole('PROJECT_MANAGER')")
 	public long createProject(@RequestHeader("Authorization") String token,
 			@Valid @RequestBody ProjectCreateRequest projectCreateRequest) throws UserNotFoundException {
 		String username = jwtService.extractUsername(token.substring(7));
@@ -70,6 +69,7 @@ public class ProjectController {
 	}
 	
 	@DeleteMapping("/{projectId}")
+	@PreAuthorize("hasRole('PROJECT_MANAGER')")
 	public ResponseEntity<Void> deleteProject(@RequestHeader("Authorization") String token,
 			@PathVariable("projectId") long projectId) {
 
@@ -90,6 +90,7 @@ public class ProjectController {
 	}
 	
 	@PutMapping("/update/{projectId}")
+	@PreAuthorize("hasRole('PROJECT_MANAGER')")
 	public ResponseEntity<ProjectResponseDto> updateProject(@RequestHeader("Authorization") String token,
 			@PathVariable Long projectId, @RequestBody ProjectUpdateRequest projectUpdateRequest)
 			throws UserNotFoundException {
@@ -118,6 +119,7 @@ public class ProjectController {
 	}
 	
 	@GetMapping("/{projectId}")
+	@PreAuthorize("hasRole('PROJECT_MANAGER')")
     public ResponseEntity<ProjectResponseDto> getProjectById(@RequestHeader("Authorization") String token,
                                                        @PathVariable Long projectId) {
         
@@ -136,5 +138,4 @@ public class ProjectController {
         ProjectMapper.toProjectResponseDto(project, projectResponseDto);
         return ResponseEntity.status(HttpStatus.OK).body(projectResponseDto);
     }
-
 }

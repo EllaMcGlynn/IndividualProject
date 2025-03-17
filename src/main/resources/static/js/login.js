@@ -12,52 +12,51 @@ $(document).ready(function () {
 	});
 	
 	// Toggle password visibility for sign-in
-	    $("#toggle-sign-in").on("click", function () {
-	        let passwordField = $("#password-sign-in");
-	        let icon = $(this);
+    $("#toggle-sign-in").on("click", function () {
+        let passwordField = $("#password-sign-in");
+        let icon = $(this);
 
-	        if (passwordField.attr("type") === "password") {
-	            passwordField.attr("type", "text"); // Show the password
-	            icon.removeClass("bi-lock-fill").addClass("bi-unlock-fill"); // Change to unlocked icon
-	        } else {
-	            passwordField.attr("type", "password"); // Hide the password
-	            icon.removeClass("bi-unlock-fill").addClass("bi-lock-fill"); // Change to locked icon
-	        }
-	    });
+        if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text"); // Show the password
+            icon.removeClass("bi-lock-fill").addClass("bi-unlock-fill"); // Change to unlocked icon
+        } else {
+            passwordField.attr("type", "password"); // Hide the password
+            icon.removeClass("bi-unlock-fill").addClass("bi-lock-fill"); // Change to locked icon
+        }
+    });
 
-	    // Toggle password visibility for sign-up
-	    $("#toggle-sign-up").on("click", function () {
-	        let passwordField = $("#password-sign-up");
-	        let icon = $(this);
+    // Toggle password visibility for sign-up
+    $("#toggle-sign-up").on("click", function () {
+        let passwordField = $("#password-sign-up");
+        let icon = $(this);
 
-	        if (passwordField.attr("type") === "password") {
-	            passwordField.attr("type", "text"); // Show the password
-	            icon.removeClass("bi-lock-fill").addClass("bi-unlock-fill"); // Change to unlocked icon
-	        } else {
-	            passwordField.attr("type", "password"); // Hide the password
-	            icon.removeClass("bi-unlock-fill").addClass("bi-lock-fill"); // Change to locked icon
-	        }
-	    });
-		
-		function showMessage(message, type) {
-		       const messageContainer = $("#message-container");
-
-		       // Add message and type class to message container
-		       messageContainer.html(`
-		           <div class="alert ${type}">
-		               <span class="message">${message}</span>
-		           </div>
-		       `);
-
-		       // Show the message container with fade-in effect
-		       messageContainer.addClass('show');
-
-		       // Hide the message after 5 seconds
-		       setTimeout(function () {
-		           messageContainer.removeClass('show'); // Fade out the message
-		       }, 3000); // Remove the message after 5 seconds
-		   }
+        if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text"); // Show the password
+            icon.removeClass("bi-lock-fill").addClass("bi-unlock-fill"); // Change to unlocked icon
+        } else {
+            passwordField.attr("type", "password"); // Hide the password
+            icon.removeClass("bi-unlock-fill").addClass("bi-lock-fill"); // Change to locked icon
+        }
+    });
 	
+	function showMessage(message, type) {
+		const messageContainer = $("#message-container");
+
+       	// Add message and type class to message container
+       	messageContainer.html(`
+           <div class="alert ${type}">
+               <span class="message">${message}</span>
+           </div>
+       `);
+
+       	// Show the message container with fade-in effect
+       	messageContainer.addClass('show');
+
+      	// Hide the message after 5 seconds
+       	setTimeout(function () {
+           messageContainer.removeClass('show'); // Fade out the message
+       	}, 3000); // Remove the message after 5 second
+	}
 	
 	$("#signup-btn").off("click").on("click", function () {
 		let username = $("#username-sign-up").val();
