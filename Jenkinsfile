@@ -32,10 +32,10 @@ pipeline {
             steps {
                 sh '''
                     mvn sonar:sonar \
-                    -Dsonar.projectKey=AnyDO \
-                    -Dsonar.projectName="AnyDO" \
-                    -Dsonar.host.url=http://sonarqube:9000 \
-                    -Dsonar.token=${SONAR_TOKEN}
+                      -Dsonar.projectKey=AnyDo \
+                      -Dsonar.projectName='AnyDo' \
+                      -Dsonar.host.url=http://localhost:9000 \
+                      -Dsonar.token=$SONAR_TOKEN
                 '''
             }
         }
