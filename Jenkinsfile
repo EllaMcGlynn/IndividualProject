@@ -31,7 +31,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 sh '''
-                    mvn clean verify sonar:sonar \
+                    mvn sonar:sonar \
                     -Dsonar.projectKey=AnyDO \
                     -Dsonar.projectName="AnyDO" \
                     -Dsonar.host.url=http://sonarqube:9000 \
