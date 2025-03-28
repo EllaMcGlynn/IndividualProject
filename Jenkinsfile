@@ -34,7 +34,7 @@ pipeline {
                     mvn sonar:sonar \
                       -Dsonar.projectKey=AnyDo \
                       -Dsonar.projectName='AnyDo' \
-                      -Dsonar.host.url=http://localhost:9000 \
+                      -Dsonar.host.url=http://Sonarqube-individual:9000 \
                       -Dsonar.token=$SONAR_TOKEN
                 '''
             }
