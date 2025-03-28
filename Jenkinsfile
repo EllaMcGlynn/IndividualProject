@@ -42,7 +42,7 @@ pipeline {
  
         stage('Docker Build') {
             steps {
-                sh 'docker build -t AnyDO:latest'
+                sh 'docker build -t AnyDO:latest .'
             }
         }
     }
