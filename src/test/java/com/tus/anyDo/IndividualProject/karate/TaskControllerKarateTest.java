@@ -9,17 +9,13 @@ import com.intuit.karate.junit5.Karate;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
-public class ProjectControllerKarateTest {
-	private static final String FOLDER = "classpath:karate_files/project_controller_features";
+public class TaskControllerKarateTest {
+	private static final String FOLDER = "classpath:karate_files/task_controller_features";
 
 	@Karate.Test
 	Karate runAll() {
 		return Karate.run(
-			FOLDER + "/create_my_project.feature",
-			FOLDER + "/get_my_projects.feature",
-			FOLDER + "/get_by_projectID.feature",
-			FOLDER + "/update_project.feature",
-			FOLDER + "/delete_project.feature"
+			FOLDER + "/create_task_teamworker.feature"
 		).relativeTo(getClass());
 	}
 

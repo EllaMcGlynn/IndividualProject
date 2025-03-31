@@ -71,7 +71,7 @@ public class ProjectController {
 	public ProjectResponseDto updateProject(
 			@RequestHeader("Authorization") String token,
 			@PathVariable Long projectId, 
-			@RequestBody ProjectUpdateRequest projectUpdateRequest
+			@Valid @RequestBody ProjectUpdateRequest projectUpdateRequest
 	) throws UserNotFoundException, ProjectNotFoundException, UnauthorizedAccessToProjectException {
 		String username = jwtService.extractUsername(token.substring(7));
 		return projectService.updateProject(projectId, projectUpdateRequest, username);
