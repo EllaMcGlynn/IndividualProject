@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/EllaMcGlynn/IndividualProject', branch: 'master'
+                git url: 'https://github.com/EllaMcGlynn/IndividualProject', branch: 'dev'
             }
         }
  
