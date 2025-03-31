@@ -42,6 +42,7 @@ public class TaskController {
 
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('TEAMWORKER')")
+	@ResponseStatus(HttpStatus.CREATED)
 	public TaskResponseDto createTask(
 			@RequestHeader("Authorization") String token,
 			@Valid @RequestBody TaskCreateRequest taskCreateRequest

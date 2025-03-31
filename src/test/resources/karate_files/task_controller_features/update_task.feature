@@ -4,19 +4,19 @@ Feature: Create Project as Project Manager
     * def loginResponse = call read('classpath:karate_files/security_controller_features/login_as_teamworker.feature')
     * def token = loginResponse.response.jwt
     
-    * def projectCreationResponse = call read('classpath:karate_files/project_controller_features/create_my_project.feature')
-    * def projectId = projectCreationResponse.response
+    * def createTaskResponse = call read('classpath:karate_files/task_controller_features/create_task_teamworker.feature')
+    * def taskId = createTaskResponse.response.id
 
   Scenario: Create a new Task
-  	Given url baseUrl + '/api/tasks/add'
+  	Given url baseUrl + '/api/tasks/update/' + taskId
   	* header Authorization = 'Bearer ' + token
     And request 
       """
       {
-        "name": "New Task",
-        "projectId": #(projectId),
+        "taskName": "New Task",
+        "projectId": 1,
         "status": "IN_PROGRESS"
       }
       """
-    When method POST
-    Then status 201
+    When method PUT
+    Then status 200

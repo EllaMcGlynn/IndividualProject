@@ -11,11 +11,16 @@ import com.intuit.karate.junit5.Karate;
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class TaskControllerKarateTest {
 	private static final String FOLDER = "classpath:karate_files/task_controller_features";
-
+	
+	
 	@Karate.Test
 	Karate runAll() {
 		return Karate.run(
-			FOLDER + "/create_task_teamworker.feature"
+			FOLDER + "/create_task_teamworker.feature",
+			FOLDER + "/get_tasks.feature",
+			FOLDER + "/get_manager_tasks.feature",
+			FOLDER + "/get_task_by_id.feature",
+			FOLDER + "/delete_task.feature"
 		).relativeTo(getClass());
 	}
 
