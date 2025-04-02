@@ -50,7 +50,7 @@ class LoginSeleniumTest {
 		options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--remote-allow-origins=*");
-		driver = new ChromeDriver();
+		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.get(BASE_URL + "/index.html");
 		waitDriver = new WebDriverWait(driver, Duration.ofSeconds(10));
