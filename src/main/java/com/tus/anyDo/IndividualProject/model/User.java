@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data  // This will generate getters, setters, toString, equals, and hashCode methods
 public class User implements UserDetails {
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(role);
+		if (role != null) authorities.add(role);
 		return authorities;
 	}
 }

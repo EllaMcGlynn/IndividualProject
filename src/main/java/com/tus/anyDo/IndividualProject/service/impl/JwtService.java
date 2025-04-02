@@ -5,7 +5,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.Setter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,15 +21,12 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@Setter
 public class JwtService implements IJwtService {
-	private static final String SECRET_KEY = "4981f57ac11c2e710c94954e6e3620bc9930bc49404cf85294a7af28fed7ff4c"; // Secret key
-
 	private static final String MISSING_ROLE_EXCEPTION = "User role must be provided";
 	
-	private Key getSigningKey() {
-		byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-		return Keys.hmacShaKeyFor(keyBytes); // Securely generates an HMAC SHA-256 key
-	}
+	@Value("${security.jwt.secret}")
+	private String secret;
 
 	public String generateToken(UserDetails user) throws IncompleteUserDetailsException {
 		String username = user.getUsername();
@@ -45,26 +44,29 @@ public class JwtService implements IJwtService {
 				.signWith(getSigningKey(), SignatureAlgorithm.HS256) // SHA-256 signing
 				.compact();
 	}
-
-	public Claims extractAllClaims(String token) {
-		return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
-	}
-
+	
 	public String extractUsername(String token) {
 		return extractClaim(token, Claims::getSubject);
 	}
+	
+	public boolean isTokenValid(String token, UserDetails userDetails) {
+		String username = extractUsername(token);
+		return username.equals(userDetails.getUsername());
+	}
+	
+	
+	
+	private Claims extractAllClaims(String token) {
+		return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+	}
 
-	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+	private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
 		Claims claims = extractAllClaims(token);
 		return claimsResolver.apply(claims);
 	}
-
-	public boolean isTokenValid(String token, UserDetails userDetails) {
-		String username = extractUsername(token);
-		return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-	}
-
-	private boolean isTokenExpired(String token) {
-		return extractClaim(token, Claims::getExpiration).before(new Date());
+	
+	private Key getSigningKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(secret);
+		return Keys.hmacShaKeyFor(keyBytes); // Securely generates an HMAC SHA-256 key
 	}
 }

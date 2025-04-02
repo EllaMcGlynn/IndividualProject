@@ -24,25 +24,19 @@ pipeline {
  
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'mvn verify jacoco:report'
             }
         }
  
         stage('SonarQube Analysis') {
             steps {
                 sh '''
-                    mvn clean verify sonar:sonar \
-                    -Dsonar.projectKey=AnyDO \
-                    -Dsonar.projectName="AnyDO" \
-                    -Dsonar.host.url=http://sonarqube:9000 \
-                    -Dsonar.token=${SONAR_TOKEN}
+                    mvn sonar:sonar \
+                      -Dsonar.projectKey=AnyDo \
+                      -Dsonar.projectName='AnyDo' \
+                      -Dsonar.host.url=http://Sonarqube-individual:9000 \
+                      -Dsonar.token=$SONAR_TOKEN
                 '''
-            }
-        }
- 
-        stage('Docker Build') {
-            steps {
-                sh 'docker build -t anydo:latest .'
             }
         }
     }

@@ -9,7 +9,6 @@ import com.tus.anyDo.IndividualProject.constants.UserMessages;
 import com.tus.anyDo.IndividualProject.dao.UserRepository;
 import com.tus.anyDo.IndividualProject.dto.UserRegisterRequest;
 import com.tus.anyDo.IndividualProject.exception.UserAlreadyExistsException;
-import com.tus.anyDo.IndividualProject.exception.UserNotFoundException;
 import com.tus.anyDo.IndividualProject.model.User;
 import com.tus.anyDo.IndividualProject.service.IUserService;
 
@@ -36,11 +35,5 @@ public class UserService implements IUserService {
         	throw new UserAlreadyExistsException(UserMessages.USER_ALREADY_EXISTS_MESSAGE(userReq.getUsername()));
         }
         userRepository.save(user);
-    }
-
-    @Override
-    public User getUserByUsername(String username) throws UserNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found")); // Handle this exception as needed
     }
 }

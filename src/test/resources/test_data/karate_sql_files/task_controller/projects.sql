@@ -1,0 +1,3 @@
+INSERT INTO project VALUES (4,1,'TestProject1');
+
+ALTER TABLE project ALTER COLUMN id RESTART WITH 2;
