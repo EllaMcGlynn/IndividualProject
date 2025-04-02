@@ -1,13 +1,11 @@
-Feature: Create Project as Project Manager
+Feature: Create Task as a Teamworker
 
-  Background:
-    * def loginResponse = call read('classpath:karate_files/security_controller_features/login_as_teamworker.feature')
-    * def token = loginResponse.response.jwt
-    
-    * def projectCreationResponse = call read('classpath:karate_files/project_controller_features/create_my_project.feature')
-    * def projectId = projectCreationResponse.response
+  Background: Import Login Helper method and login as Teamworker
+    * callonce read('classpath:karate_files/helper_features/login_helper.feature')
+    * def token = login('TestTeamworker', 'TestPassword1')
 
-  Scenario: Create a new Task
+  Scenario: Create a new Task and assign to project with id 1
+  	* def projectId = 1
   	Given url baseUrl + '/api/tasks/add'
   	* header Authorization = 'Bearer ' + token
     And request 
@@ -20,3 +18,8 @@ Feature: Create Project as Project Manager
       """
     When method POST
     Then status 201
+    And match response.id == 7
+    And match response.taskName == 'New Task'
+    And match response.projectName == 'TestProject1'
+    And match response.assignedUser == 'TestTeamworker'
+    And match response.status == 'IN_PROGRESS'

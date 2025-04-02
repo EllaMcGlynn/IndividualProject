@@ -1,8 +1,8 @@
 Feature: Delete Project as Project Manager
 
-  Background:
-    * def loginResponse = call read('classpath:karate_files/security_controller_features/login_as_project_manager.feature')
-    * def token = loginResponse.response.jwt
+	Background: Import Login Helper method and login as Project Manager
+    * callonce read('classpath:karate_files/helper_features/login_helper.feature')
+    * def token = login('TestProjectManager', 'TestPassword1')
 
   Scenario: Successfully delete a project
     Given url baseUrl + '/api/projects/1'

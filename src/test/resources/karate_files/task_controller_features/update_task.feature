@@ -1,14 +1,11 @@
-Feature: Create Project as Project Manager
+Feature: Update Task
 
-  Background:
-    * def loginResponse = call read('classpath:karate_files/security_controller_features/login_as_teamworker.feature')
-    * def token = loginResponse.response.jwt
-    
-    * def createTaskResponse = call read('classpath:karate_files/task_controller_features/create_task_teamworker.feature')
-    * def taskId = createTaskResponse.response.id
+ Background: Import Login Helper method and login as Teamworker
+    * callonce read('classpath:karate_files/helper_features/login_helper.feature')
+    * def token = login('TestTeamworker', 'TestPassword1')
 
-  Scenario: Create a new Task
-  	Given url baseUrl + '/api/tasks/update/' + taskId
+  Scenario: Update Task as Teamworker
+  	Given url baseUrl + '/api/tasks/update/1'
   	* header Authorization = 'Bearer ' + token
     And request 
       """
@@ -20,3 +17,14 @@ Feature: Create Project as Project Manager
       """
     When method PUT
     Then status 200
+    And match response == 
+    """
+    {
+    	id: 1, 
+    	taskName: 'New Task', 
+    	projectName: "TestProject1", 
+    	assignedUser: 'TestTeamworker', 
+   		status: 'IN_PROGRESS'
+   	}
+   	"""
+   	
