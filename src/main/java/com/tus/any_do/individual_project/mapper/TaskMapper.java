@@ -1,0 +1,41 @@
+package com.tus.any_do.individual_project.mapper;
+
+import com.tus.any_do.individual_project.dto.TaskCreateRequest;
+import com.tus.any_do.individual_project.dto.TaskResponseDto;
+import com.tus.any_do.individual_project.dto.TaskUpdateRequest;
+import com.tus.any_do.individual_project.model.Project;
+import com.tus.any_do.individual_project.model.Task;
+import com.tus.any_do.individual_project.model.User;
+
+public class TaskMapper {
+	private TaskMapper() {}
+	
+	public static final void toTaskResponseDto(Task task, TaskResponseDto taskResponseDto) {
+		taskResponseDto.setId(task.getId());
+		if (task.getProject() == null) {
+			taskResponseDto.setProjectName(null);
+		} else {
+			taskResponseDto.setProjectName(task.getProject().getProjectName());
+		}
+		taskResponseDto.setStatus(task.getStatus());
+		taskResponseDto.setTaskName(task.getTaskName());
+		taskResponseDto.setAssignedUser(task.getUser().getUsername());
+	}
+	
+	public static final void toTask(TaskCreateRequest taskCreateRequest, User creator, Project project, Task task) {
+        task.setCreator(creator);
+        task.setProject(project);
+        task.setStatus(taskCreateRequest.getStatus());
+        task.setTaskName(taskCreateRequest.getName());
+        task.setUser(creator);
+	}
+	
+	public static final void toTask(TaskUpdateRequest taskUpdateRequest, User creator, Project project, Task task) {
+		task.setCreator(creator);
+        task.setProject(project);
+        task.setStatus(taskUpdateRequest.getStatus());
+        task.setTaskName(taskUpdateRequest.getTaskName());
+        task.setUser(creator);
+	}
+
+}
