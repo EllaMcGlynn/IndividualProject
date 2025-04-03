@@ -36,6 +36,7 @@ import java.time.Duration;
     executionPhase = ExecutionPhase.AFTER_TEST_METHOD
 )
 class LoginSeleniumTest {
+	//screencast comment
 	private static final String BASE_URL = "http://localhost:8082";
 	private static final String DASHBOARD_URL = "http://localhost:8082/index.html";
 	
@@ -78,4 +79,3 @@ class LoginSeleniumTest {
 		}
 	}
 }
-//screencast
