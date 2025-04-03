@@ -43,7 +43,7 @@ class LoginSeleniumTest {
 	private WebDriver driver;
 
 	@BeforeAll
-	void setup() { // Comment to test NGrok
+	void setup() { 
 		WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless");
@@ -78,3 +78,4 @@ class LoginSeleniumTest {
 		}
 	}
 }
+//screencast
