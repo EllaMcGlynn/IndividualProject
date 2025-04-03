@@ -12,7 +12,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import com.tus.any_do.individual_project.exception.IncompleteUserDetailsException;
 import com.tus.any_do.individual_project.model.Role;
 import com.tus.any_do.individual_project.model.User;
-import com.tus.any_do.individual_project.service.impl.JwtService;
 
 class JwtServiceTest {
 	private static final String TEST_SECRET = "d60940f8702212104bbd24381f138a68d35699f51caf57aeb44951da755a9187";

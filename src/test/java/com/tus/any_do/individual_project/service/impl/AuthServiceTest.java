@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.tus.any_do.individual_project.dao.UserRepository;
 import com.tus.any_do.individual_project.exception.InvalidCredentialsException;
 import com.tus.any_do.individual_project.model.User;
-import com.tus.any_do.individual_project.service.impl.AuthService;
 
 class AuthServiceTest {
 	private UserRepository userRepository;

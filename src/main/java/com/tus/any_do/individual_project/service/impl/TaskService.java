@@ -34,16 +34,23 @@ public class TaskService implements ITaskService {
     	this.taskRepository = taskRepository;
         this.projectRepository = projectRepository; 
     }
-
+    
+    private static final String DOES_NOT_EXIST = " does not exist.";
+    private static final String USER_WITH_USERNAME = "User with username: ";
+    private static final String PROJECT_WITH_ID = "Project with id: ";
+    private static final String CANNOT_BE_FOUND = " cannot be found.";
+    private static final String TASK_WITH_ID = "Task with id: ";
+    private static final String NO_ACCESS = "You do not have access to task with id: ";
+    
     @Override
     public TaskResponseDto createTask(TaskCreateRequest taskCreateRequest, String username) throws ProjectNotFoundException, UserNotFoundException {
     	// Retrieve the user by their username - throw exception if doesn't exist
-		User creator = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username: " + username + " does not exist."));
+		User creator = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(USER_WITH_USERNAME + username + DOES_NOT_EXIST));
 		
     	// Retrieve the Project object by projectId (may be null if no project is assigned)
 		Long projectId = taskCreateRequest.getProjectId();
         Project project = (projectId != null) 
-        		? projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException("Project with id: " + projectId + " does not exist.")) 
+        		? projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(PROJECT_WITH_ID + projectId + DOES_NOT_EXIST)) 
         		: null;
 
         // Create a new Task with the given attributes and associations
@@ -64,7 +71,7 @@ public class TaskService implements ITaskService {
     @Override
     public List<TaskResponseDto> getTasksByUsername(String username) throws UserNotFoundException {
 		// Retrieve the user by their username
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username: " + username + " does not exist."));
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(USER_WITH_USERNAME + username + DOES_NOT_EXIST));
 		
 		// Fetch all tasks for the user
 		return taskRepository.findByUserId(user.getId())
@@ -79,10 +86,10 @@ public class TaskService implements ITaskService {
     
     @Override
     public void deleteTask(String username, long taskId) throws TaskNotFoundException, UnauthorizedAccessToTaskException {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task with id: " + taskId + " cannot be found."));
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(TASK_WITH_ID + taskId + CANNOT_BE_FOUND));
 
 		if (!task.getCreator().getUsername().equals(username)) {
-			throw new UnauthorizedAccessToTaskException("You do not have access to task with id: " + taskId); // Users cannot delete tasks created by other users
+			throw new UnauthorizedAccessToTaskException(NO_ACCESS + taskId); // Users cannot delete tasks created by other users
 		}
 		
 		taskRepository.delete(task);
@@ -92,10 +99,10 @@ public class TaskService implements ITaskService {
     @Override
     public TaskResponseDto getTaskById(String username, Long taskId) throws TaskNotFoundException, UnauthorizedAccessToTaskException {
     	// Retrieve the task by its ID
-    	Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task with id: " + taskId + " cannot be found."));
+    	Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(TASK_WITH_ID + taskId + CANNOT_BE_FOUND));
 
 		if (!task.getCreator().getUsername().equals(username)) {
-			throw new UnauthorizedAccessToTaskException("You do not have access to task with id: " + taskId); // Users cannot delete tasks created by other users
+			throw new UnauthorizedAccessToTaskException(NO_ACCESS + taskId); // Users cannot delete tasks created by other users
 		}
 
         // Convert the task to a response DTO
@@ -113,19 +120,19 @@ public class TaskService implements ITaskService {
 			TaskUpdateRequest taskUpdateRequest
 	) throws UnauthorizedAccessToTaskException, UserNotFoundException, ProjectNotFoundException, TaskNotFoundException {
 		// Retrieve the user by their username
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username: " + username + " does not exist."));
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(USER_WITH_USERNAME + username + DOES_NOT_EXIST));
 	
 		// Fetch project if applicable
 		Long projectId = taskUpdateRequest.getProjectId();
 		Project project = (projectId != null) 
-        		? projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException("Project with id: " + projectId + " does not exist.")) 
+        		? projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(PROJECT_WITH_ID + projectId + DOES_NOT_EXIST)) 
         		: null;
 		
 		// Retrieve the task by its ID
-    	Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task with id: " + taskId + " cannot be found."));
+    	Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(TASK_WITH_ID + taskId + CANNOT_BE_FOUND));
 
 		if (!task.getCreator().getUsername().equals(username)) {
-			throw new UnauthorizedAccessToTaskException("You do not have access to task with id: " + taskId); // Users cannot delete tasks created by other users
+			throw new UnauthorizedAccessToTaskException(NO_ACCESS + taskId); // Users cannot delete tasks created by other users
 		}
 
 		TaskMapper.toTask(taskUpdateRequest, user, project, task);
@@ -141,12 +148,12 @@ public class TaskService implements ITaskService {
 	@Override
 	public ManagerAssignResponse assignTask(String username, ManagerAssignRequest managerAssignRequest) throws ProjectNotFoundException, UserNotFoundException {
 		// Retrieve the user by their username
-		User manager = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username: " + username + " does not exist."));
-		User assignedUser = userRepository.findByUsername(managerAssignRequest.getAssignedUser()).orElseThrow(() -> new UserNotFoundException("User with username: " + username + " does not exist."));
+		User manager = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(USER_WITH_USERNAME + username + DOES_NOT_EXIST));
+		User assignedUser = userRepository.findByUsername(managerAssignRequest.getAssignedUser()).orElseThrow(() -> new UserNotFoundException(USER_WITH_USERNAME + username + DOES_NOT_EXIST));
 
 		Long projectId = managerAssignRequest.getProjectId();
 		Project project = (projectId != null) 
-        		? projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException("Project with id: " + projectId + " does not exist.")) 
+        		? projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(PROJECT_WITH_ID + projectId + DOES_NOT_EXIST)) 
         		: null;
 
 	    Task task = new Task();
@@ -172,7 +179,7 @@ public class TaskService implements ITaskService {
 	@Override
 	public List<TaskResponseDto> getManagerTasks(String username) throws UserNotFoundException {
 		// Retrieve the user by their username
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username: " + username + " does not exist."));	
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(USER_WITH_USERNAME + username + DOES_NOT_EXIST));	
 
 		// Fetch all tasks for the user
 		return taskRepository.findByCreator(user)

@@ -15,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.tus.any_do.individual_project.dao.UserRepository;
-import com.tus.any_do.individual_project.filter.JWTAuthenticationFilter;
 import com.tus.any_do.individual_project.model.User;
 import com.tus.any_do.individual_project.service.IJwtService;
 
@@ -25,7 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class JWTAuthenticationFilterTest {
+class JWTAuthenticationFilterTest {
 
     @Mock
     private IJwtService jwtService;

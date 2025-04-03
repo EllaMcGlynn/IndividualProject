@@ -19,7 +19,6 @@ import com.tus.any_do.individual_project.dto.UserRegisterRequest;
 import com.tus.any_do.individual_project.exception.UserAlreadyExistsException;
 import com.tus.any_do.individual_project.model.Role;
 import com.tus.any_do.individual_project.model.User;
-import com.tus.any_do.individual_project.service.impl.UserService;
 
 class UserServiceTest {
 	private UserRepository userRepository;

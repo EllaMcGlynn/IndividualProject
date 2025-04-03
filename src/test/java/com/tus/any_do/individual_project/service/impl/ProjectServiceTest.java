@@ -27,7 +27,6 @@ import com.tus.any_do.individual_project.exception.UserNotFoundException;
 import com.tus.any_do.individual_project.model.Project;
 import com.tus.any_do.individual_project.model.Role;
 import com.tus.any_do.individual_project.model.User;
-import com.tus.any_do.individual_project.service.impl.ProjectService;
 
 class ProjectServiceTest {
 	private UserRepository userRepository;

@@ -32,7 +32,6 @@ import com.tus.any_do.individual_project.model.Project;
 import com.tus.any_do.individual_project.model.Role;
 import com.tus.any_do.individual_project.model.Task;
 import com.tus.any_do.individual_project.model.User;
-import com.tus.any_do.individual_project.service.impl.TaskService;
 
 class TaskServiceTest {
     private UserRepository userRepository;
