@@ -8,6 +8,7 @@ class IndividualProjectApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//test that springboot test starts up
 	}
 
 }
