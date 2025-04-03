@@ -31,7 +31,7 @@ public class ProjectService implements IProjectService {
     
     private static final String PROJECT_WITH_ID = "Project with ID: ";
     private static final String DOES_NOT_EXIST = " does not exist.";
-    private static final String NO_ACCESS = "You do not have access to project with id: ";
+    private static final String NO_ACCESS = "You do not have access to the project with id: ";
 
     @Override
     @Transactional
