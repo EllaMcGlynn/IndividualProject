@@ -21,6 +21,13 @@ pipeline {
                 sh 'mvn clean install -DskipTests'
             }
         }
+
+        stage('Package JAR') {
+            steps {
+                sh 'mvn package -DskipTests'
+                sh 'cp target/*.jar target/app.jar' // Ensures a consistent JAR filename
+            }
+        }
  
         stage('Test') {
             steps {
